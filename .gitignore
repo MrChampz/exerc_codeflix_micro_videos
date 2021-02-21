@@ -81,3 +81,8 @@ modules.xml
 
 # Sonarlint plugin
 .idea/sonarlint
+
+# IDE Helper generated files
+www/.phpstorm.meta.php
+www/_ide_helper.php
+www/_ide_helper_models.php
