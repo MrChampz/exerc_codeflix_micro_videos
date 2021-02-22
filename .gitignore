@@ -5,6 +5,7 @@ www/storage/*.key
 www/vendor
 www/.env
 www/.env.backup
+www/.env.testing
 www/.phpunit.result.cache
 node_modules
 public/hot
@@ -13,6 +14,7 @@ storage/*.key
 vendor
 .env
 .env.backup
+.env.testing
 .phpunit.result.cache
 docker-compose.override.yml
 Homestead.json

@@ -7,12 +7,13 @@ services:
       context: .
       target: dev
     container_name: micro-videos-app
-    entrypoint: dockerize -template /templates/.env:.env -wait tcp://db:3306 -timeout 40s /entrypoint.sh
-    environment: 
+    entrypoint: dockerize -template /templates/.env:.env -template /templates/.env.testing:.env.testing -wait tcp://db:3306 -timeout 40s /entrypoint.sh
+    environment:
       - _DB_HOST=db
       - _DB_DATABASE=code_micro_videos
       - _DB_USERNAME=root
       - _DB_PASSWORD=root
+      - _TEST_DB_DATABASE=code_micro_videos_test
     volumes:
       - ./www:/var/www
     networks:
@@ -32,31 +33,32 @@ services:
       - ./www:/var/www
     networks:
       - app-network
-    depends_on: 
+    depends_on:
       - app
 
   db:
     build: .docker/mysql
     container_name: micro-videos-db
+    command: --innodb-use-native-aio=0
     restart: always
     tty: true
-    ports: 
+    ports:
       - "33006:3306"
     volumes:
       - ./.docker/dbdata:/var/lib/mysql
+      - ./.docker/mysql:/docker-entrypoint-initdb.d
     environment:
-      - MYSQL_DATABASE=code_micro_videos
       - MYSQL_USER=root
       - MYSQL_ROOT_PASSWORD=root
-    networks: 
+    networks:
       - app-network
 
   redis:
     image: redis:alpine
     container_name: micro-videos-redis
-    expose: 
+    expose:
       - 6379
-    networks: 
+    networks:
       - app-network
 
 networks:
