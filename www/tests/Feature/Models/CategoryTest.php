@@ -105,7 +105,7 @@ class CategoryTest extends TestCase
         $category->delete();
         $category->refresh();
 
-        $this->assertNotNull($category->getCreatedAtColumn());
+        $this->assertNotNull($category->deleted_at);
 
         $categories = Category::all();
         $this->assertNotContains($category, $categories);
