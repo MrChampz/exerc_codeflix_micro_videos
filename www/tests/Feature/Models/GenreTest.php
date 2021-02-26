@@ -90,7 +90,7 @@ class GenreTest extends TestCase
         $genre->delete();
         $genre->refresh();
 
-        $this->assertNotNull($genre->getCreatedAtColumn());
+        $this->assertNotNull($genre->deleted_at);
 
         $genres = Genre::all();
         $this->assertNotContains($genre, $genres);
