@@ -32,5 +32,11 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         'GenreController',
         $exceptCreateAndEdit
     );
+
+    Route::resource(
+        'cast_members',
+        'CastMemberController',
+        $exceptCreateAndEdit
+    );
 });
 

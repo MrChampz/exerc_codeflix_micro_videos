@@ -18,7 +18,10 @@ class CategoryTest extends TestCase
     {
         parent::setUp();
         $this->uuidValidator = new GenericValidator();
-        $this->category = Category::factory()->count(1)->create();
+        $this->category = Category::factory()->create([
+            'description' => 'test_description',
+            'is_active' => false
+        ]);
     }
 
     public function testList()
@@ -80,46 +83,39 @@ class CategoryTest extends TestCase
 
     public function testUpdate()
     {
-        $category = Category::factory()->create([
-            'description' => 'test_description',
-            'is_active' => false
-        ]);
-
         $data = [
             'name' => 'test_name_updated',
             'description' => 'test_description_updated',
             'is_active' => true
         ];
-        $category->update($data);
+        $this->category->update($data);
 
         foreach ($data as $key => $value) {
-            $this->assertEquals($value, $category->{$key});
+            $this->assertEquals($value, $this->category->{$key});
         }
     }
 
     public function testDelete()
     {
-        $category = Category::factory()->create();
+        $this->category->delete();
+        $this->category->refresh();
 
-        $category->delete();
-        $category->refresh();
-
-        $this->assertNotNull($category->deleted_at);
-        $this->assertNull(Category::find($category->id));
+        $this->assertNotNull($this->category->deleted_at);
+        $this->assertNull(Category::find($this->category->id));
     }
 
     public function testRestore()
     {
-        $category = Category::factory()->create();
+        $this->category = Category::factory()->create();
 
-        $category->delete();
-        $category->refresh();
+        $this->category->delete();
+        $this->category->refresh();
 
-        $this->assertNotNull($category->deleted_at);
-        $this->assertNull(Category::find($category->id));
+        $this->assertNotNull($this->category->deleted_at);
+        $this->assertNull(Category::find($this->category->id));
 
-        $category->restore();
+        $this->category->restore();
 
-        $this->assertNotNull(Category::find($category->id));
+        $this->assertNotNull(Category::find($this->category->id));
     }
 }

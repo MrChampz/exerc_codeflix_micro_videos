@@ -18,7 +18,9 @@ class GenreTest extends TestCase
     {
         parent::setUp();
         $this->uuidValidator = new GenericValidator();
-        $this->genre = Genre::factory()->count(1)->create();
+        $this->genre = Genre::factory()->create([
+            'is_active' => false
+        ]);
     }
 
     public function testList()
@@ -66,44 +68,36 @@ class GenreTest extends TestCase
 
     public function testUpdate()
     {
-        $genre = Genre::factory()->create([
-            'is_active' => false
-        ]);
-
         $data = [
             'name' => 'test_name_updated',
             'is_active' => true
         ];
-        $genre->update($data);
+        $this->genre->update($data);
 
         foreach ($data as $key => $value) {
-            $this->assertEquals($value, $genre->{$key});
+            $this->assertEquals($value, $this->genre->{$key});
         }
     }
 
     public function testDelete()
     {
-        $genre = Genre::factory()->create();
+        $this->genre->delete();
+        $this->genre->refresh();
 
-        $genre->delete();
-        $genre->refresh();
-
-        $this->assertNotNull($genre->deleted_at);
-        $this->assertNull(Genre::find($genre->id));
+        $this->assertNotNull($this->genre->deleted_at);
+        $this->assertNull(Genre::find($this->genre->id));
     }
 
     public function testRestore()
     {
-        $genre = Genre::factory()->create();
+        $this->genre->delete();
+        $this->genre->refresh();
 
-        $genre->delete();
-        $genre->refresh();
+        $this->assertNotNull($this->genre->deleted_at);
+        $this->assertNull(Genre::find($this->genre->id));
 
-        $this->assertNotNull($genre->deleted_at);
-        $this->assertNull(Genre::find($genre->id));
+        $this->genre->restore();
 
-        $genre->restore();
-
-        $this->assertNotNull(Genre::find($genre->id));
+        $this->assertNotNull(Genre::find($this->genre->id));
     }
 }

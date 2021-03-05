@@ -17,7 +17,9 @@ class GenreControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->genre = Genre::factory()->create();
+        $this->genre = Genre::factory()->create([
+            'is_active' => false
+        ]);
     }
 
     public function testIndex()
@@ -63,13 +65,9 @@ class GenreControllerTest extends TestCase
 
     public function testUpdate()
     {
-        $genre = Genre::factory()->create([
-            'is_active' => false
-        ]);
-
         $response = $this->json(
             'PUT',
-            route('genres.update', ['genre' => $genre->id]),
+            route('genres.update', ['genre' => $this->genre->id]),
             [
                 'name' => 'test',
                 'is_active' => true
