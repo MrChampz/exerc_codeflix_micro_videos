@@ -14,18 +14,16 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run docker-compose
-        uses: sudo-bot/action-docker-compose@latest
-        with:
-          cli-args: -f docker-compose.ci.yml up -d
+        run: docker-compose -f docker-compose.ci.yml up -d
 
       - name: Chown in /var/www
         run: docker exec -u root -t app chown -R www-data:www-data /var/www
 
       - name: Copy .env
-        run: docker exec -t app cp .env.example .env
+        run: docker exec -t app cp /var/www/.env.example /var/www/.env
 
       - name: Copy .env.testing
-        run: docker exec -t app cp .env.testing.example .env.testing
+        run: docker exec -t app cp /var/www/.env.testing.example /var/www/.env.testing
 
       - name: Install composer dependencies
         run: docker exec -t app composer install
