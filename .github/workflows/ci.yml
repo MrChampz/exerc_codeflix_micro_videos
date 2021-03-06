@@ -1,0 +1,42 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run test suite
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run docker-compose
+        uses: sudo-bot/action-docker-compose@latest
+        with:
+          cli-args: -f docker-compose.prod.yaml up -d
+
+      - name: Chown in /var/www
+        run: |
+          docker-compose exec -u root -t app chown -R www-data:www-data /var/www
+
+      - name: Install composer dependencies
+        run: docker-compose exec -t app composer install
+
+      - name: Copy .env
+        run: docker-compose exec -t app cp .env.example .env
+
+      - name: Copy .env.testing
+        run: docker-compose exec -t app cp .env.testing.example .env.testing
+
+      - name: Run Laravel key:generate
+        run: docker-compose exec app php /var/www/artisan key:generate
+
+      - name: Run migrations
+        run: docker-compose exec app php /var/www/artisan migrate
+
+      - name: Run PHPUnit
+        run: |
+          docker-compose exec app php /var/www/vendor/bin/phpunit -c /var/www/phpunit.xml
