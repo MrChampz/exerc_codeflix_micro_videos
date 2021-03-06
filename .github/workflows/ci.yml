@@ -16,27 +16,25 @@ jobs:
       - name: Run docker-compose
         uses: sudo-bot/action-docker-compose@latest
         with:
-          cli-args: -f docker-compose.prod.yaml up -d
+          cli-args: -f docker-compose.ci.yaml up -d
 
       - name: Chown in /var/www
-        run: |
-          docker-compose exec -u root -t app chown -R www-data:www-data /var/www
-
-      - name: Install composer dependencies
-        run: docker-compose exec -t app composer install
+        run: docker exec -u root -t app chown -R www-data:www-data /var/www
 
       - name: Copy .env
-        run: docker-compose exec -t app cp .env.example .env
+        run: docker exec -t app cp .env.example .env
 
       - name: Copy .env.testing
-        run: docker-compose exec -t app cp .env.testing.example .env.testing
+        run: docker exec -t app cp .env.testing.example .env.testing
+
+      - name: Install composer dependencies
+        run: docker exec -t app composer install
 
       - name: Run Laravel key:generate
-        run: docker-compose exec app php /var/www/artisan key:generate
+        run: docker exec -t app php /var/www/artisan key:generate
 
       - name: Run migrations
-        run: docker-compose exec app php /var/www/artisan migrate
+        run: docker exec -t app php /var/www/artisan migrate
 
       - name: Run PHPUnit
-        run: |
-          docker-compose exec app php /var/www/vendor/bin/phpunit -c /var/www/phpunit.xml
+        run: docker exec -t app php /var/www/vendor/bin/phpunit -c /var/www/phpunit.xml
