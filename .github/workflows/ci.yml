@@ -16,7 +16,7 @@ jobs:
       - name: Run docker-compose
         uses: sudo-bot/action-docker-compose@latest
         with:
-          cli-args: -f docker-compose.ci.yaml up -d
+          cli-args: -f docker-compose.ci.yml up -d
 
       - name: Chown in /var/www
         run: docker exec -u root -t app chown -R www-data:www-data /var/www
