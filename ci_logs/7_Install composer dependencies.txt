@@ -1,0 +1,300 @@
+2021-03-06T08:55:13.6573254Z ##[group]Run docker exec -t app composer install
+2021-03-06T08:55:13.6575550Z [36;1mdocker exec -t app composer install[0m
+2021-03-06T08:55:13.6616277Z shell: /bin/bash -e {0}
+2021-03-06T08:55:13.6616707Z ##[endgroup]
+2021-03-06T08:55:13.8780185Z [32mInstalling dependencies from lock file (including require-dev)[39m
+2021-03-06T08:55:13.8857624Z [32mVerifying lock file contents can be installed on current platform.[39m
+2021-03-06T08:55:13.9064269Z [32mPackage operations: 121 installs, 0 updates, 0 removals[39m
+2021-03-06T08:55:13.9071782Z   - Downloading [32mcomposer/package-versions-deprecated[39m ([33m1.11.99.1[39m)
+2021-03-06T08:55:13.9083560Z   - Downloading [32mphpdocumentor/reflection-common[39m ([33m2.2.0[39m)
+2021-03-06T08:55:13.9087659Z   - Downloading [32mphpdocumentor/type-resolver[39m ([33m1.4.0[39m)
+2021-03-06T08:55:13.9092322Z   - Downloading [32mvoku/portable-ascii[39m ([33m1.5.6[39m)
+2021-03-06T08:55:13.9097010Z   - Downloading [32msymfony/polyfill-php80[39m ([33mv1.22.1[39m)
+2021-03-06T08:55:13.9101174Z   - Downloading [32msymfony/polyfill-mbstring[39m ([33mv1.22.1[39m)
+2021-03-06T08:55:13.9105343Z   - Downloading [32msymfony/polyfill-ctype[39m ([33mv1.22.1[39m)
+2021-03-06T08:55:13.9110169Z   - Downloading [32mphpoption/phpoption[39m ([33m1.7.5[39m)
+2021-03-06T08:55:13.9114922Z   - Downloading [32mgraham-campbell/result-type[39m ([33mv1.0.1[39m)
+2021-03-06T08:55:13.9119352Z   - Downloading [32mvlucas/phpdotenv[39m ([33mv5.3.0[39m)
+2021-03-06T08:55:13.9123454Z   - Downloading [32msymfony/css-selector[39m ([33mv5.2.3[39m)
+2021-03-06T08:55:13.9128042Z   - Downloading [32mtijsverkoyen/css-to-inline-styles[39m ([33m2.2.3[39m)
+2021-03-06T08:55:13.9185033Z   - Downloading [32msymfony/var-dumper[39m ([33mv5.2.3[39m)
+2021-03-06T08:55:13.9186140Z   - Downloading [32msymfony/deprecation-contracts[39m ([33mv2.2.0[39m)
+2021-03-06T08:55:13.9187096Z   - Downloading [32msymfony/routing[39m ([33mv5.2.3[39m)
+2021-03-06T08:55:13.9188059Z   - Downloading [32msymfony/process[39m ([33mv5.2.3[39m)
+2021-03-06T08:55:13.9189063Z   - Downloading [32msymfony/polyfill-php72[39m ([33mv1.22.1[39m)
+2021-03-06T08:55:13.9190135Z   - Downloading [32msymfony/polyfill-intl-normalizer[39m ([33mv1.22.1[39m)
+2021-03-06T08:55:13.9191305Z   - Downloading [32msymfony/polyfill-intl-idn[39m ([33mv1.22.1[39m)
+2021-03-06T08:55:13.9192268Z   - Downloading [32msymfony/mime[39m ([33mv5.2.3[39m)
+2021-03-06T08:55:13.9193153Z   - Downloading [32msymfony/polyfill-php73[39m ([33mv1.22.1[39m)
+2021-03-06T08:55:13.9194160Z   - Downloading [32msymfony/http-foundation[39m ([33mv5.2.3[39m)
+2021-03-06T08:55:13.9195169Z   - Downloading [32msymfony/http-client-contracts[39m ([33mv2.3.1[39m)
+2021-03-06T08:55:13.9196238Z   - Downloading [32mpsr/event-dispatcher[39m ([33m1.0.0[39m)
+2021-03-06T08:55:13.9197367Z   - Downloading [32msymfony/event-dispatcher-contracts[39m ([33mv2.2.0[39m)
+2021-03-06T08:55:13.9198563Z   - Downloading [32msymfony/event-dispatcher[39m ([33mv5.2.3[39m)
+2021-03-06T08:55:13.9199421Z   - Downloading [32mpsr/log[39m ([33m1.1.3[39m)
+2021-03-06T08:55:13.9200334Z   - Downloading [32msymfony/error-handler[39m ([33mv5.2.3[39m)
+2021-03-06T08:55:13.9201281Z   - Downloading [32msymfony/http-kernel[39m ([33mv5.2.3[39m)
+2021-03-06T08:55:13.9202151Z   - Downloading [32msymfony/finder[39m ([33mv5.2.3[39m)
+2021-03-06T08:55:13.9203194Z   - Downloading [32msymfony/polyfill-intl-grapheme[39m ([33mv1.22.1[39m)
+2021-03-06T08:55:13.9204139Z   - Downloading [32msymfony/string[39m ([33mv5.2.3[39m)
+2021-03-06T08:55:13.9204999Z   - Downloading [32mpsr/container[39m ([33m1.0.0[39m)
+2021-03-06T08:55:13.9205951Z   - Downloading [32msymfony/service-contracts[39m ([33mv2.2.0[39m)
+2021-03-06T08:55:13.9206847Z   - Downloading [32msymfony/console[39m ([33mv5.2.3[39m)
+2021-03-06T08:55:13.9207774Z   - Downloading [32msymfony/polyfill-iconv[39m ([33mv1.22.1[39m)
+2021-03-06T08:55:13.9208658Z   - Downloading [32mdoctrine/lexer[39m ([33m1.2.1[39m)
+2021-03-06T08:55:13.9209988Z   - Downloading [32megulias/email-validator[39m ([33m2.1.25[39m)
+2021-03-06T08:55:13.9211003Z   - Downloading [32mswiftmailer/swiftmailer[39m ([33mv6.2.5[39m)
+2021-03-06T08:55:13.9211889Z   - Downloading [32mramsey/collection[39m ([33m1.1.3[39m)
+2021-03-06T08:55:13.9212968Z   - Downloading [32mbrick/math[39m ([33m0.9.2[39m)
+2021-03-06T08:55:13.9213863Z   - Downloading [32mramsey/uuid[39m ([33m4.1.1[39m)
+2021-03-06T08:55:13.9214706Z   - Downloading [32mpsr/simple-cache[39m ([33m1.0.1[39m)
+2021-03-06T08:55:13.9215480Z   - Downloading [32mopis/closure[39m ([33m3.6.1[39m)
+2021-03-06T08:55:13.9216380Z   - Downloading [32msymfony/translation-contracts[39m ([33mv2.3.0[39m)
+2021-03-06T08:55:13.9217334Z   - Downloading [32msymfony/translation[39m ([33mv5.2.3[39m)
+2021-03-06T08:55:13.9218127Z   - Downloading [32mnesbot/carbon[39m ([33m2.45.1[39m)
+2021-03-06T08:55:13.9218994Z   - Downloading [32mmonolog/monolog[39m ([33m2.2.0[39m)
+2021-03-06T08:55:13.9222909Z   - Downloading [32mleague/mime-type-detection[39m ([33m1.7.0[39m)
+2021-03-06T08:55:13.9223913Z   - Downloading [32mleague/flysystem[39m ([33m1.1.3[39m)
+2021-03-06T08:55:13.9224852Z   - Downloading [32mleague/commonmark[39m ([33m1.5.7[39m)
+2021-03-06T08:55:13.9225694Z   - Downloading [32mwebmozart/assert[39m ([33m1.9.1[39m)
+2021-03-06T08:55:13.9226712Z   - Downloading [32mdragonmantank/cron-expression[39m ([33mv3.1.0[39m)
+2021-03-06T08:55:13.9227677Z   - Downloading [32mdoctrine/inflector[39m ([33m2.0.3[39m)
+2021-03-06T08:55:13.9228604Z   - Downloading [32mlaravel/framework[39m ([33mv8.28.1[39m)
+2021-03-06T08:55:13.9229476Z   - Downloading [32mdoctrine/event-manager[39m ([33m1.1.1[39m)
+2021-03-06T08:55:13.9230406Z   - Downloading [32mdoctrine/cache[39m ([33m1.10.2[39m)
+2021-03-06T08:55:13.9231187Z   - Downloading [32mdoctrine/dbal[39m ([33m3.0.0[39m)
+2021-03-06T08:55:13.9232082Z   - Downloading [32msymfony/filesystem[39m ([33mv5.2.3[39m)
+2021-03-06T08:55:13.9232982Z   - Downloading [32mseld/phar-utils[39m ([33m1.1.1[39m)
+2021-03-06T08:55:13.9233788Z   - Downloading [32mseld/jsonlint[39m ([33m1.8.3[39m)
+2021-03-06T08:55:13.9234646Z   - Downloading [32mreact/promise[39m ([33mv2.8.0[39m)
+2021-03-06T08:55:13.9235521Z   - Downloading [32mjustinrainbow/json-schema[39m ([33m5.2.10[39m)
+2021-03-06T08:55:13.9236550Z   - Downloading [32mcomposer/xdebug-handler[39m ([33m1.4.5[39m)
+2021-03-06T08:55:13.9237541Z   - Downloading [32mcomposer/spdx-licenses[39m ([33m1.5.5[39m)
+2021-03-06T08:55:13.9238409Z   - Downloading [32mcomposer/semver[39m ([33m3.2.4[39m)
+2021-03-06T08:55:13.9239300Z   - Downloading [32mcomposer/ca-bundle[39m ([33m1.2.9[39m)
+2021-03-06T08:55:13.9243989Z   - Downloading [32mcomposer/composer[39m ([33m2.0.9[39m)
+2021-03-06T08:55:13.9245007Z   - Downloading [32mbarryvdh/reflection-docblock[39m ([33mv2.0.6[39m)
+2021-03-06T08:55:13.9246028Z   - Downloading [32mbarryvdh/laravel-ide-helper[39m ([33mv2.9.0[39m)
+2021-03-06T08:55:13.9246903Z   - Downloading [32mfilp/whoops[39m ([33m2.9.2[39m)
+2021-03-06T08:55:13.9249622Z   - Downloading [32mfacade/ignition-contracts[39m ([33m1.0.2[39m)
+2021-03-06T08:55:13.9250594Z   - Downloading [32mfacade/flare-client-php[39m ([33m1.4.0[39m)
+2021-03-06T08:55:13.9251835Z   - Downloading [32mfacade/ignition[39m ([33m2.5.13[39m)
+2021-03-06T08:55:13.9252813Z   - Downloading [32mfakerphp/faker[39m ([33mv1.13.0[39m)
+2021-03-06T08:55:13.9255622Z   - Downloading [32mfideloper/proxy[39m ([33m4.4.1[39m)
+2021-03-06T08:55:13.9257012Z   - Downloading [32masm89/stack-cors[39m ([33mv2.0.2[39m)
+2021-03-06T08:55:13.9259681Z   - Downloading [32mfruitcake/laravel-cors[39m ([33mv2.0.3[39m)
+2021-03-06T08:55:13.9261154Z   - Downloading [32mpsr/http-message[39m ([33m1.0.1[39m)
+2021-03-06T08:55:13.9263478Z   - Downloading [32mpsr/http-client[39m ([33m1.0.1[39m)
+2021-03-06T08:55:13.9264679Z   - Downloading [32mralouphie/getallheaders[39m ([33m3.0.3[39m)
+2021-03-06T08:55:13.9265802Z   - Downloading [32mguzzlehttp/psr7[39m ([33m1.7.0[39m)
+2021-03-06T08:55:13.9267210Z   - Downloading [32mguzzlehttp/promises[39m ([33m1.4.0[39m)
+2021-03-06T08:55:13.9269628Z   - Downloading [32mguzzlehttp/guzzle[39m ([33m7.2.0[39m)
+2021-03-06T08:55:13.9271151Z   - Downloading [32mlaravel/sail[39m ([33mv1.3.1[39m)
+2021-03-06T08:55:13.9272366Z   - Downloading [32mnikic/php-parser[39m ([33mv4.10.4[39m)
+2021-03-06T08:55:13.9275509Z   - Downloading [32mdnoegel/php-xdg-base-dir[39m ([33mv0.1.1[39m)
+2021-03-06T08:55:13.9276402Z   - Downloading [32mpsy/psysh[39m ([33mv0.10.6[39m)
+2021-03-06T08:55:13.9280932Z   - Downloading [32mlaravel/tinker[39m ([33mv2.6.0[39m)
+2021-03-06T08:55:13.9281937Z   - Downloading [32mhamcrest/hamcrest-php[39m ([33mv2.0.1[39m)
+2021-03-06T08:55:13.9285874Z   - Downloading [32mmockery/mockery[39m ([33m1.4.2[39m)
+2021-03-06T08:55:13.9288021Z   - Downloading [32mnunomaduro/collision[39m ([33mv5.3.0[39m)
+2021-03-06T08:55:13.9291352Z   - Downloading [32mphpdocumentor/reflection-docblock[39m ([33m5.2.2[39m)
+2021-03-06T08:55:13.9292653Z   - Downloading [32msebastian/version[39m ([33m3.0.2[39m)
+2021-03-06T08:55:13.9296586Z   - Downloading [32msebastian/type[39m ([33m2.3.1[39m)
+2021-03-06T08:55:13.9298071Z   - Downloading [32msebastian/resource-operations[39m ([33m3.0.3[39m)
+2021-03-06T08:55:13.9301231Z   - Downloading [32msebastian/recursion-context[39m ([33m4.0.4[39m)
+2021-03-06T08:55:13.9304347Z   - Downloading [32msebastian/object-reflector[39m ([33m2.0.4[39m)
+2021-03-06T08:55:13.9305662Z   - Downloading [32msebastian/object-enumerator[39m ([33m4.0.4[39m)
+2021-03-06T08:55:13.9306610Z   - Downloading [32msebastian/global-state[39m ([33m5.0.2[39m)
+2021-03-06T08:55:13.9309686Z   - Downloading [32msebastian/exporter[39m ([33m4.0.3[39m)
+2021-03-06T08:55:13.9310864Z   - Downloading [32msebastian/environment[39m ([33m5.1.3[39m)
+2021-03-06T08:55:13.9313896Z   - Downloading [32msebastian/diff[39m ([33m4.0.4[39m)
+2021-03-06T08:55:13.9315052Z   - Downloading [32msebastian/comparator[39m ([33m4.0.6[39m)
+2021-03-06T08:55:13.9316258Z   - Downloading [32msebastian/code-unit[39m ([33m1.0.8[39m)
+2021-03-06T08:55:13.9321227Z   - Downloading [32msebastian/cli-parser[39m ([33m1.0.1[39m)
+2021-03-06T08:55:13.9322148Z   - Downloading [32mphpunit/php-timer[39m ([33m5.0.3[39m)
+2021-03-06T08:55:13.9323347Z   - Downloading [32mphpunit/php-text-template[39m ([33m2.0.4[39m)
+2021-03-06T08:55:13.9327330Z   - Downloading [32mphpunit/php-invoker[39m ([33m3.1.1[39m)
+2021-03-06T08:55:13.9328308Z   - Downloading [32mphpunit/php-file-iterator[39m ([33m3.0.5[39m)
+2021-03-06T08:55:13.9335001Z   - Downloading [32mtheseer/tokenizer[39m ([33m1.2.0[39m)
+2021-03-06T08:55:13.9338690Z   - Downloading [32msebastian/lines-of-code[39m ([33m1.0.3[39m)
+2021-03-06T08:55:13.9339899Z   - Downloading [32msebastian/complexity[39m ([33m2.0.2[39m)
+2021-03-06T08:55:13.9342782Z   - Downloading [32msebastian/code-unit-reverse-lookup[39m ([33m2.0.3[39m)
+2021-03-06T08:55:13.9346857Z   - Downloading [32mphpunit/php-code-coverage[39m ([33m9.2.5[39m)
+2021-03-06T08:55:13.9348235Z   - Downloading [32mdoctrine/instantiator[39m ([33m1.4.0[39m)
+2021-03-06T08:55:13.9351777Z   - Downloading [32mphpspec/prophecy[39m ([33m1.12.2[39m)
+2021-03-06T08:55:13.9352632Z   - Downloading [32mphar-io/version[39m ([33m3.0.4[39m)
+2021-03-06T08:55:13.9353457Z   - Downloading [32mphar-io/manifest[39m ([33m2.0.1[39m)
+2021-03-06T08:55:13.9354261Z   - Downloading [32mmyclabs/deep-copy[39m ([33m1.10.2[39m)
+2021-03-06T08:55:13.9355078Z   - Downloading [32mphpunit/phpunit[39m ([33m9.5.2[39m)
+2021-03-06T08:55:14.2451280Z    0/121 [>---------------------------]   0%
+2021-03-06T08:55:14.3455187Z [2K  17/121 [===>------------------------]  14%
+2021-03-06T08:55:14.4459179Z [2K  30/121 [======>---------------------]  24%
+2021-03-06T08:55:14.5457702Z [2K  46/121 [==========>-----------------]  38%
+2021-03-06T08:55:14.6460519Z [2K  62/121 [==============>-------------]  51%
+2021-03-06T08:55:14.7470137Z [2K  79/121 [==================>---------]  65%
+2021-03-06T08:55:14.8496788Z [2K  93/121 [=====================>------]  76%
+2021-03-06T08:55:14.9550911Z [2K 103/121 [=======================>----]  85%
+2021-03-06T08:55:14.9777197Z [2K 117/121 [===========================>]  96%
+2021-03-06T08:55:14.9777841Z [2K 121/121 [============================] 100%
+2021-03-06T08:55:14.9782714Z [2K  - Installing [32mcomposer/package-versions-deprecated[39m ([33m1.11.99.1[39m): Extracting archive
+2021-03-06T08:55:14.9902371Z   - Installing [32mphpdocumentor/reflection-common[39m ([33m2.2.0[39m): Extracting archive
+2021-03-06T08:55:14.9927420Z   - Installing [32mphpdocumentor/type-resolver[39m ([33m1.4.0[39m): Extracting archive
+2021-03-06T08:55:14.9952719Z   - Installing [32mvoku/portable-ascii[39m ([33m1.5.6[39m): Extracting archive
+2021-03-06T08:55:15.0009184Z   - Installing [32msymfony/polyfill-php80[39m ([33mv1.22.1[39m): Extracting archive
+2021-03-06T08:55:15.0024744Z   - Installing [32msymfony/polyfill-mbstring[39m ([33mv1.22.1[39m): Extracting archive
+2021-03-06T08:55:15.0121306Z   - Installing [32msymfony/polyfill-ctype[39m ([33mv1.22.1[39m): Extracting archive
+2021-03-06T08:55:15.0188825Z   - Installing [32mphpoption/phpoption[39m ([33m1.7.5[39m): Extracting archive
+2021-03-06T08:55:15.0257935Z   - Installing [32mgraham-campbell/result-type[39m ([33mv1.0.1[39m): Extracting archive
+2021-03-06T08:55:15.0358679Z   - Installing [32mvlucas/phpdotenv[39m ([33mv5.3.0[39m): Extracting archive
+2021-03-06T08:55:15.0392440Z   - Installing [32msymfony/css-selector[39m ([33mv5.2.3[39m): Extracting archive
+2021-03-06T08:55:15.0404868Z   - Installing [32mtijsverkoyen/css-to-inline-styles[39m ([33m2.2.3[39m): Extracting archive
+2021-03-06T08:55:15.0451586Z   - Installing [32msymfony/var-dumper[39m ([33mv5.2.3[39m): Extracting archive
+2021-03-06T08:55:15.0459286Z   - Installing [32msymfony/deprecation-contracts[39m ([33mv2.2.0[39m): Extracting archive
+2021-03-06T08:55:15.0460515Z   - Installing [32msymfony/routing[39m ([33mv5.2.3[39m): Extracting archive
+2021-03-06T08:55:15.0467586Z   - Installing [32msymfony/process[39m ([33mv5.2.3[39m): Extracting archive
+2021-03-06T08:55:15.0468732Z   - Installing [32msymfony/polyfill-php72[39m ([33mv1.22.1[39m): Extracting archive
+2021-03-06T08:55:15.0476081Z   - Installing [32msymfony/polyfill-intl-normalizer[39m ([33mv1.22.1[39m): Extracting archive
+2021-03-06T08:55:15.0479626Z   - Installing [32msymfony/polyfill-intl-idn[39m ([33mv1.22.1[39m): Extracting archive
+2021-03-06T08:55:15.0482727Z   - Installing [32msymfony/mime[39m ([33mv5.2.3[39m): Extracting archive
+2021-03-06T08:55:15.0484125Z   - Installing [32msymfony/polyfill-php73[39m ([33mv1.22.1[39m): Extracting archive
+2021-03-06T08:55:15.0487983Z   - Installing [32msymfony/http-foundation[39m ([33mv5.2.3[39m): Extracting archive
+2021-03-06T08:55:15.0492097Z   - Installing [32msymfony/http-client-contracts[39m ([33mv2.3.1[39m): Extracting archive
+2021-03-06T08:55:15.0501457Z   - Installing [32mpsr/event-dispatcher[39m ([33m1.0.0[39m): Extracting archive
+2021-03-06T08:55:15.0513297Z   - Installing [32msymfony/event-dispatcher-contracts[39m ([33mv2.2.0[39m): Extracting archive
+2021-03-06T08:55:15.0520517Z   - Installing [32msymfony/event-dispatcher[39m ([33mv5.2.3[39m): Extracting archive
+2021-03-06T08:55:15.0521829Z   - Installing [32mpsr/log[39m ([33m1.1.3[39m): Extracting archive
+2021-03-06T08:55:15.0525303Z   - Installing [32msymfony/error-handler[39m ([33mv5.2.3[39m): Extracting archive
+2021-03-06T08:55:15.0528330Z   - Installing [32msymfony/http-kernel[39m ([33mv5.2.3[39m): Extracting archive
+2021-03-06T08:55:15.0529613Z   - Installing [32msymfony/finder[39m ([33mv5.2.3[39m): Extracting archive
+2021-03-06T08:55:15.0532862Z   - Installing [32msymfony/polyfill-intl-grapheme[39m ([33mv1.22.1[39m): Extracting archive
+2021-03-06T08:55:15.0537684Z   - Installing [32msymfony/string[39m ([33mv5.2.3[39m): Extracting archive
+2021-03-06T08:55:15.0538906Z   - Installing [32mpsr/container[39m ([33m1.0.0[39m): Extracting archive
+2021-03-06T08:55:15.0542131Z   - Installing [32msymfony/service-contracts[39m ([33mv2.2.0[39m): Extracting archive
+2021-03-06T08:55:15.0543723Z   - Installing [32msymfony/console[39m ([33mv5.2.3[39m): Extracting archive
+2021-03-06T08:55:15.0547158Z   - Installing [32msymfony/polyfill-iconv[39m ([33mv1.22.1[39m): Extracting archive
+2021-03-06T08:55:15.0551522Z   - Installing [32mdoctrine/lexer[39m ([33m1.2.1[39m): Extracting archive
+2021-03-06T08:55:15.0556000Z   - Installing [32megulias/email-validator[39m ([33m2.1.25[39m): Extracting archive
+2021-03-06T08:55:15.0560368Z   - Installing [32mswiftmailer/swiftmailer[39m ([33mv6.2.5[39m): Extracting archive
+2021-03-06T08:55:15.0564420Z   - Installing [32mramsey/collection[39m ([33m1.1.3[39m): Extracting archive
+2021-03-06T08:55:15.0568438Z   - Installing [32mbrick/math[39m ([33m0.9.2[39m): Extracting archive
+2021-03-06T08:55:15.0572510Z   - Installing [32mramsey/uuid[39m ([33m4.1.1[39m): Extracting archive
+2021-03-06T08:55:15.0576784Z   - Installing [32mpsr/simple-cache[39m ([33m1.0.1[39m): Extracting archive
+2021-03-06T08:55:15.0580693Z   - Installing [32mopis/closure[39m ([33m3.6.1[39m): Extracting archive
+2021-03-06T08:55:15.0584887Z   - Installing [32msymfony/translation-contracts[39m ([33mv2.3.0[39m): Extracting archive
+2021-03-06T08:55:15.0588817Z   - Installing [32msymfony/translation[39m ([33mv5.2.3[39m): Extracting archive
+2021-03-06T08:55:15.0592692Z   - Installing [32mnesbot/carbon[39m ([33m2.45.1[39m): Extracting archive
+2021-03-06T08:55:15.0596792Z   - Installing [32mmonolog/monolog[39m ([33m2.2.0[39m): Extracting archive
+2021-03-06T08:55:15.0601115Z   - Installing [32mleague/mime-type-detection[39m ([33m1.7.0[39m): Extracting archive
+2021-03-06T08:55:15.0604551Z   - Installing [32mleague/flysystem[39m ([33m1.1.3[39m): Extracting archive
+2021-03-06T08:55:15.0608593Z   - Installing [32mleague/commonmark[39m ([33m1.5.7[39m): Extracting archive
+2021-03-06T08:55:15.0612744Z   - Installing [32mwebmozart/assert[39m ([33m1.9.1[39m): Extracting archive
+2021-03-06T08:55:15.0617006Z   - Installing [32mdragonmantank/cron-expression[39m ([33mv3.1.0[39m): Extracting archive
+2021-03-06T08:55:15.0620962Z   - Installing [32mdoctrine/inflector[39m ([33m2.0.3[39m): Extracting archive
+2021-03-06T08:55:15.0625116Z   - Installing [32mlaravel/framework[39m ([33mv8.28.1[39m): Extracting archive
+2021-03-06T08:55:15.0629316Z   - Installing [32mdoctrine/event-manager[39m ([33m1.1.1[39m): Extracting archive
+2021-03-06T08:55:15.0633158Z   - Installing [32mdoctrine/cache[39m ([33m1.10.2[39m): Extracting archive
+2021-03-06T08:55:15.0637245Z   - Installing [32mdoctrine/dbal[39m ([33m3.0.0[39m): Extracting archive
+2021-03-06T08:55:15.0641140Z   - Installing [32msymfony/filesystem[39m ([33mv5.2.3[39m): Extracting archive
+2021-03-06T08:55:15.0645213Z   - Installing [32mseld/phar-utils[39m ([33m1.1.1[39m): Extracting archive
+2021-03-06T08:55:15.0649193Z   - Installing [32mseld/jsonlint[39m ([33m1.8.3[39m): Extracting archive
+2021-03-06T08:55:15.0653920Z   - Installing [32mreact/promise[39m ([33mv2.8.0[39m): Extracting archive
+2021-03-06T08:55:15.0657854Z   - Installing [32mjustinrainbow/json-schema[39m ([33m5.2.10[39m): Extracting archive
+2021-03-06T08:55:15.0661792Z   - Installing [32mcomposer/xdebug-handler[39m ([33m1.4.5[39m): Extracting archive
+2021-03-06T08:55:15.0665808Z   - Installing [32mcomposer/spdx-licenses[39m ([33m1.5.5[39m): Extracting archive
+2021-03-06T08:55:15.0669801Z   - Installing [32mcomposer/semver[39m ([33m3.2.4[39m): Extracting archive
+2021-03-06T08:55:15.0673837Z   - Installing [32mcomposer/ca-bundle[39m ([33m1.2.9[39m): Extracting archive
+2021-03-06T08:55:15.0677869Z   - Installing [32mcomposer/composer[39m ([33m2.0.9[39m): Extracting archive
+2021-03-06T08:55:15.0681953Z   - Installing [32mbarryvdh/reflection-docblock[39m ([33mv2.0.6[39m): Extracting archive
+2021-03-06T08:55:15.0685946Z   - Installing [32mbarryvdh/laravel-ide-helper[39m ([33mv2.9.0[39m): Extracting archive
+2021-03-06T08:55:15.0689834Z   - Installing [32mfilp/whoops[39m ([33m2.9.2[39m): Extracting archive
+2021-03-06T08:55:15.0694861Z   - Installing [32mfacade/ignition-contracts[39m ([33m1.0.2[39m): Extracting archive
+2021-03-06T08:55:15.0698832Z   - Installing [32mfacade/flare-client-php[39m ([33m1.4.0[39m): Extracting archive
+2021-03-06T08:55:15.0702683Z   - Installing [32mfacade/ignition[39m ([33m2.5.13[39m): Extracting archive
+2021-03-06T08:55:15.0706711Z   - Installing [32mfakerphp/faker[39m ([33mv1.13.0[39m): Extracting archive
+2021-03-06T08:55:15.0710463Z   - Installing [32mfideloper/proxy[39m ([33m4.4.1[39m): Extracting archive
+2021-03-06T08:55:15.0714428Z   - Installing [32masm89/stack-cors[39m ([33mv2.0.2[39m): Extracting archive
+2021-03-06T08:55:15.0718335Z   - Installing [32mfruitcake/laravel-cors[39m ([33mv2.0.3[39m): Extracting archive
+2021-03-06T08:55:15.0722239Z   - Installing [32mpsr/http-message[39m ([33m1.0.1[39m): Extracting archive
+2021-03-06T08:55:15.0726184Z   - Installing [32mpsr/http-client[39m ([33m1.0.1[39m): Extracting archive
+2021-03-06T08:55:15.0730402Z   - Installing [32mralouphie/getallheaders[39m ([33m3.0.3[39m): Extracting archive
+2021-03-06T08:55:15.0734386Z   - Installing [32mguzzlehttp/psr7[39m ([33m1.7.0[39m): Extracting archive
+2021-03-06T08:55:15.0738231Z   - Installing [32mguzzlehttp/promises[39m ([33m1.4.0[39m): Extracting archive
+2021-03-06T08:55:15.0742129Z   - Installing [32mguzzlehttp/guzzle[39m ([33m7.2.0[39m): Extracting archive
+2021-03-06T08:55:15.0745909Z   - Installing [32mlaravel/sail[39m ([33mv1.3.1[39m): Extracting archive
+2021-03-06T08:55:15.0749896Z   - Installing [32mnikic/php-parser[39m ([33mv4.10.4[39m): Extracting archive
+2021-03-06T08:55:15.0753812Z   - Installing [32mdnoegel/php-xdg-base-dir[39m ([33mv0.1.1[39m): Extracting archive
+2021-03-06T08:55:15.0757572Z   - Installing [32mpsy/psysh[39m ([33mv0.10.6[39m): Extracting archive
+2021-03-06T08:55:15.0761615Z   - Installing [32mlaravel/tinker[39m ([33mv2.6.0[39m): Extracting archive
+2021-03-06T08:55:15.0765500Z   - Installing [32mhamcrest/hamcrest-php[39m ([33mv2.0.1[39m): Extracting archive
+2021-03-06T08:55:15.0772839Z   - Installing [32mmockery/mockery[39m ([33m1.4.2[39m): Extracting archive
+2021-03-06T08:55:15.0774754Z   - Installing [32mnunomaduro/collision[39m ([33mv5.3.0[39m): Extracting archive
+2021-03-06T08:55:15.0782226Z   - Installing [32mphpdocumentor/reflection-docblock[39m ([33m5.2.2[39m): Extracting archive
+2021-03-06T08:55:15.0788246Z   - Installing [32msebastian/version[39m ([33m3.0.2[39m): Extracting archive
+2021-03-06T08:55:15.0791654Z   - Installing [32msebastian/type[39m ([33m2.3.1[39m): Extracting archive
+2021-03-06T08:55:15.0797716Z   - Installing [32msebastian/resource-operations[39m ([33m3.0.3[39m): Extracting archive
+2021-03-06T08:55:15.0803636Z   - Installing [32msebastian/recursion-context[39m ([33m4.0.4[39m): Extracting archive
+2021-03-06T08:55:15.0810524Z   - Installing [32msebastian/object-reflector[39m ([33m2.0.4[39m): Extracting archive
+2021-03-06T08:55:15.0814855Z   - Installing [32msebastian/object-enumerator[39m ([33m4.0.4[39m): Extracting archive
+2021-03-06T08:55:15.0819031Z   - Installing [32msebastian/global-state[39m ([33m5.0.2[39m): Extracting archive
+2021-03-06T08:55:15.0828663Z   - Installing [32msebastian/exporter[39m ([33m4.0.3[39m): Extracting archive
+2021-03-06T08:55:15.0835635Z   - Installing [32msebastian/environment[39m ([33m5.1.3[39m): Extracting archive
+2021-03-06T08:55:15.0841983Z   - Installing [32msebastian/diff[39m ([33m4.0.4[39m): Extracting archive
+2021-03-06T08:55:15.0848486Z   - Installing [32msebastian/comparator[39m ([33m4.0.6[39m): Extracting archive
+2021-03-06T08:55:15.0859401Z   - Installing [32msebastian/code-unit[39m ([33m1.0.8[39m): Extracting archive
+2021-03-06T08:55:15.0860738Z   - Installing [32msebastian/cli-parser[39m ([33m1.0.1[39m): Extracting archive
+2021-03-06T08:55:15.0863851Z   - Installing [32mphpunit/php-timer[39m ([33m5.0.3[39m): Extracting archive
+2021-03-06T08:55:15.0866778Z   - Installing [32mphpunit/php-text-template[39m ([33m2.0.4[39m): Extracting archive
+2021-03-06T08:55:15.0868033Z   - Installing [32mphpunit/php-invoker[39m ([33m3.1.1[39m): Extracting archive
+2021-03-06T08:55:15.0870537Z   - Installing [32mphpunit/php-file-iterator[39m ([33m3.0.5[39m): Extracting archive
+2021-03-06T08:55:15.0872643Z   - Installing [32mtheseer/tokenizer[39m ([33m1.2.0[39m): Extracting archive
+2021-03-06T08:55:15.0875463Z   - Installing [32msebastian/lines-of-code[39m ([33m1.0.3[39m): Extracting archive
+2021-03-06T08:55:15.0876558Z   - Installing [32msebastian/complexity[39m ([33m2.0.2[39m): Extracting archive
+2021-03-06T08:55:15.0879439Z   - Installing [32msebastian/code-unit-reverse-lookup[39m ([33m2.0.3[39m): Extracting archive
+2021-03-06T08:55:15.0880823Z   - Installing [32mphpunit/php-code-coverage[39m ([33m9.2.5[39m): Extracting archive
+2021-03-06T08:55:15.0883880Z   - Installing [32mdoctrine/instantiator[39m ([33m1.4.0[39m): Extracting archive
+2021-03-06T08:55:15.0885007Z   - Installing [32mphpspec/prophecy[39m ([33m1.12.2[39m): Extracting archive
+2021-03-06T08:55:15.0885969Z   - Installing [32mphar-io/version[39m ([33m3.0.4[39m): Extracting archive
+2021-03-06T08:55:15.0886931Z   - Installing [32mphar-io/manifest[39m ([33m2.0.1[39m): Extracting archive
+2021-03-06T08:55:15.0887900Z   - Installing [32mmyclabs/deep-copy[39m ([33m1.10.2[39m): Extracting archive
+2021-03-06T08:55:15.0888880Z   - Installing [32mphpunit/phpunit[39m ([33m9.5.2[39m): Extracting archive
+2021-03-06T08:55:15.2984220Z    0/110 [>---------------------------]   0%
+2021-03-06T08:55:15.4247021Z [2K  10/110 [==>-------------------------]   9%
+2021-03-06T08:55:15.5835537Z [2K  20/110 [=====>----------------------]  18%
+2021-03-06T08:55:15.8724202Z [2K  30/110 [=======>--------------------]  27%
+2021-03-06T08:55:16.2726072Z [2K  40/110 [==========>-----------------]  36%
+2021-03-06T08:55:16.6171025Z [2K  49/110 [============>---------------]  44%
+2021-03-06T08:55:16.9281000Z [2K  59/110 [===============>------------]  53%
+2021-03-06T08:55:17.2134533Z [2K  68/110 [=================>----------]  61%
+2021-03-06T08:55:18.3231381Z [2K  78/110 [===================>--------]  70%
+2021-03-06T08:55:18.4797240Z [2K  88/110 [======================>-----]  80%
+2021-03-06T08:55:18.5813575Z [2K  98/110 [========================>---]  89%
+2021-03-06T08:55:18.6323531Z [2K 108/110 [===========================>]  98%
+2021-03-06T08:55:18.6359591Z [2K 110/110 [============================] 100%
+2021-03-06T08:55:19.1931337Z [2K[32mGenerating optimized autoload files[39m
+2021-03-06T08:55:20.3165015Z [32mcomposer/package-versions-deprecated:[39m Generating version class...
+2021-03-06T08:55:20.3174353Z [32mcomposer/package-versions-deprecated:[39m ...done generating version class
+2021-03-06T08:55:20.3176742Z > Illuminate\Foundation\ComposerScripts::postAutoloadDump
+2021-03-06T08:55:20.3367581Z > @php artisan package:discover --ansi
+2021-03-06T08:55:20.4780517Z Discovered Package: [32mbarryvdh/laravel-ide-helper[39m
+2021-03-06T08:55:20.4781970Z Discovered Package: [32mfacade/ignition[39m
+2021-03-06T08:55:20.4783166Z Discovered Package: [32mfideloper/proxy[39m
+2021-03-06T08:55:20.4784269Z Discovered Package: [32mfruitcake/laravel-cors[39m
+2021-03-06T08:55:20.4785293Z Discovered Package: [32mlaravel/sail[39m
+2021-03-06T08:55:20.4786433Z Discovered Package: [32mlaravel/tinker[39m
+2021-03-06T08:55:20.4787464Z Discovered Package: [32mnesbot/carbon[39m
+2021-03-06T08:55:20.4788479Z Discovered Package: [32mnunomaduro/collision[39m
+2021-03-06T08:55:20.4789719Z [32mPackage manifest generated successfully.[39m
+2021-03-06T08:55:20.4810030Z > @php artisan ide-helper:generate
+2021-03-06T08:55:20.6427735Z Exception: No application encryption key has been specified.
+2021-03-06T08:55:20.6428905Z Skipping \Illuminate\Support\Facades\Crypt.
+2021-03-06T08:55:20.6429326Z 
+2021-03-06T08:55:20.6593754Z Exception: No application encryption key has been specified.
+2021-03-06T08:55:20.6594809Z Skipping \Illuminate\Support\Facades\Crypt.
+2021-03-06T08:55:20.6595196Z 
+2021-03-06T08:55:20.7620651Z [32mA new helper file was written to _ide_helper.php[39m
+2021-03-06T08:55:20.7660307Z > @php artisan ide-helper:meta
+2021-03-06T08:55:20.9435999Z [32mA new meta file was written to .phpstorm.meta.php[39m
+2021-03-06T08:55:20.9476101Z > @php artisan ide-helper:models --nowrite
+2021-03-06T08:55:21.1306818Z [32mModel information was written to _ide_helper_models.php[39m
+2021-03-06T08:55:21.1364697Z [32m86 packages you are using are looking for funding.[39m
+2021-03-06T08:55:21.1365657Z [32mUse the `composer fund` command to find out more![39m

@@ -1,0 +1,30 @@
+2021-03-06T08:54:09.1914397Z Current runner version: '2.277.1'
+2021-03-06T08:54:09.1949159Z ##[group]Operating System
+2021-03-06T08:54:09.1950221Z Ubuntu
+2021-03-06T08:54:09.1950670Z 18.04.5
+2021-03-06T08:54:09.1951184Z LTS
+2021-03-06T08:54:09.1951639Z ##[endgroup]
+2021-03-06T08:54:09.1952256Z ##[group]Virtual Environment
+2021-03-06T08:54:09.1952896Z Environment: ubuntu-18.04
+2021-03-06T08:54:09.1953438Z Version: 20210302.0
+2021-03-06T08:54:09.1954520Z Included Software: https://github.com/actions/virtual-environments/blob/ubuntu18/20210302.0/images/linux/Ubuntu1804-README.md
+2021-03-06T08:54:09.1955906Z Image Release: https://github.com/actions/virtual-environments/releases/tag/ubuntu18%2F
+2021-03-06T08:54:09.1956826Z ##[endgroup]
+2021-03-06T08:54:09.1958964Z ##[group]GITHUB_TOKEN Permissions
+2021-03-06T08:54:09.1960303Z Actions: write
+2021-03-06T08:54:09.1960928Z Checks: write
+2021-03-06T08:54:09.1961427Z Contents: write
+2021-03-06T08:54:09.1961978Z Deployments: write
+2021-03-06T08:54:09.1962544Z Issues: write
+2021-03-06T08:54:09.1963199Z Metadata: read
+2021-03-06T08:54:09.1963883Z OrganizationPackages: write
+2021-03-06T08:54:09.1964498Z Packages: write
+2021-03-06T08:54:09.1965049Z PullRequests: write
+2021-03-06T08:54:09.1965726Z RepositoryProjects: write
+2021-03-06T08:54:09.1966359Z SecurityEvents: write
+2021-03-06T08:54:09.1966976Z Statuses: write
+2021-03-06T08:54:09.1967608Z ##[endgroup]
+2021-03-06T08:54:09.1970831Z Prepare workflow directory
+2021-03-06T08:54:09.2654909Z Prepare all required actions
+2021-03-06T08:54:09.2666741Z Getting action download info
+2021-03-06T08:54:09.6314467Z Download action repository 'actions/checkout@v2'

@@ -1,0 +1,17 @@
+2021-03-06T08:55:21.4519829Z ##[group]Run docker exec -t app php /var/www/artisan migrate
+2021-03-06T08:55:21.4520613Z [36;1mdocker exec -t app php /var/www/artisan migrate[0m
+2021-03-06T08:55:21.4559400Z shell: /bin/bash -e {0}
+2021-03-06T08:55:21.4559828Z ##[endgroup]
+2021-03-06T08:55:21.7176202Z [32mMigration table created successfully.[39m
+2021-03-06T08:55:21.7267668Z [33mMigrating:[39m 2014_10_12_000000_create_users_table
+2021-03-06T08:55:21.7426576Z [32mMigrated:[39m  2014_10_12_000000_create_users_table (14.49ms)
+2021-03-06T08:55:21.7427673Z [33mMigrating:[39m 2014_10_12_100000_create_password_resets_table
+2021-03-06T08:55:21.7508517Z [32mMigrated:[39m  2014_10_12_100000_create_password_resets_table (7.34ms)
+2021-03-06T08:55:21.7515015Z [33mMigrating:[39m 2019_08_19_000000_create_failed_jobs_table
+2021-03-06T08:55:21.7640898Z [32mMigrated:[39m  2019_08_19_000000_create_failed_jobs_table (11.77ms)
+2021-03-06T08:55:21.7642180Z [33mMigrating:[39m 2021_02_21_145414_create_categories_table
+2021-03-06T08:55:21.7870453Z [32mMigrated:[39m  2021_02_21_145414_create_categories_table (22.15ms)
+2021-03-06T08:55:21.7875506Z [33mMigrating:[39m 2021_02_21_160220_create_genres_table
+2021-03-06T08:55:21.7999104Z [32mMigrated:[39m  2021_02_21_160220_create_genres_table (12.23ms)
+2021-03-06T08:55:21.8001030Z [33mMigrating:[39m 2021_03_05_043309_create_cast_members_table
+2021-03-06T08:55:21.8154495Z [32mMigrated:[39m  2021_03_05_043309_create_cast_members_table (14.93ms)

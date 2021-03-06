@@ -1,0 +1,5 @@
+2021-03-06T08:55:21.1600006Z ##[group]Run docker exec -t app php /var/www/artisan key:generate
+2021-03-06T08:55:21.1600844Z [36;1mdocker exec -t app php /var/www/artisan key:generate[0m
+2021-03-06T08:55:21.1659208Z shell: /bin/bash -e {0}
+2021-03-06T08:55:21.1659669Z ##[endgroup]
+2021-03-06T08:55:21.4415077Z [32mApplication key set successfully.[39m
