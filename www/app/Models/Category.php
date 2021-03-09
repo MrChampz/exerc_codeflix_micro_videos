@@ -19,4 +19,9 @@ class Category extends Model
     protected $casts = ['is_active' => 'boolean'];
 
     protected $dates = ['deleted_at'];
+
+    public function genres()
+    {
+        return $this->belongsToMany(Genre::class);
+    }
 }
