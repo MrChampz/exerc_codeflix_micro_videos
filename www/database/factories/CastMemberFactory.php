@@ -11,10 +11,10 @@ class CastMemberFactory extends Factory
 
     public function definition()
     {
-        $type = array_rand(CastMember::TYPES);
+        $type = array_rand(CastMember::TYPE_LIST);
         return [
             'name' => $this->faker->colorName,
-            'type' => CastMember::TYPES[$type]
+            'type' => CastMember::TYPE_LIST[$type]
         ];
     }
 }

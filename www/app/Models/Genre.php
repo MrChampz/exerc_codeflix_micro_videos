@@ -19,4 +19,9 @@ class Genre extends Model
     protected $casts = ['is_active' => 'boolean'];
 
     protected $dates = ['deleted_at'];
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
+    }
 }

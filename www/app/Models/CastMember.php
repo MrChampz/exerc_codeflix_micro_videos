@@ -14,7 +14,7 @@ class CastMember extends Model
     const TYPE_ACTOR = 1;
     const TYPE_DIRECTOR = 2;
 
-    const TYPES = [
+    const TYPE_LIST = [
         CastMember::TYPE_ACTOR,
         CastMember::TYPE_DIRECTOR
     ];

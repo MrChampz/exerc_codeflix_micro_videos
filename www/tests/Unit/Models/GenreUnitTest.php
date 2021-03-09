@@ -2,58 +2,58 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\Category;
+use App\Models\Genre;
 use App\Models\Traits\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use PHPUnit\Framework\TestCase;
 
-class CategoryTest extends TestCase
+class GenreUnitTest extends TestCase
 {
     use DatabaseMigrations;
 
-    private $category;
+    private $genre;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->category = new Category();
+        $this->genre = new Genre();
     }
 
     public function testTraits()
     {
         $traits = [HasFactory::class, SoftDeletes::class, Uuid::class];
-        $categoryTraits = array_keys(class_uses(Category::class));
-        $this->assertEquals($traits, $categoryTraits);
+        $genreTraits = array_keys(class_uses(Genre::class));
+        $this->assertEquals($traits, $genreTraits);
     }
 
     public function testIncrementingAttribute()
     {
-        $this->assertFalse($this->category->getIncrementing());
+        $this->assertFalse($this->genre->getIncrementing());
     }
 
     public function testKeyTypeAttribute()
     {
-        $this->assertEquals('string', $this->category->getKeyType());
+        $this->assertEquals('string', $this->genre->getKeyType());
     }
 
     public function testFillableAttribute()
     {
-        $fillable = ['name', 'description', 'is_active'];
-        $this->assertEquals($fillable, $this->category->getFillable());
+        $fillable = ['name', 'is_active'];
+        $this->assertEquals($fillable, $this->genre->getFillable());
     }
 
     public function testCastsAttribute()
     {
         $casts = ['is_active' => 'boolean', 'deleted_at' => 'datetime'];
-        $this->assertEquals($casts, $this->category->getCasts());
+        $this->assertEquals($casts, $this->genre->getCasts());
     }
 
     public function testDatesAttribute()
     {
         $dates = ['deleted_at', 'created_at', 'updated_at'];
-        $this->assertEqualsCanonicalizing($dates, $this->category->getDates());
-        $this->assertCount(count($dates), $this->category->getDates());
+        $this->assertEqualsCanonicalizing($dates, $this->genre->getDates());
+        $this->assertCount(count($dates), $this->genre->getDates());
     }
 }
