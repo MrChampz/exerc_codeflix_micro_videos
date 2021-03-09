@@ -1,0 +1,4 @@
+2021-03-06T08:55:13.2311326Z ##[group]Run docker exec -u root -t app chown -R www-data:www-data /var/www
+2021-03-06T08:55:13.2312232Z [36;1mdocker exec -u root -t app chown -R www-data:www-data /var/www[0m
+2021-03-06T08:55:13.2356201Z shell: /bin/bash -e {0}
+2021-03-06T08:55:13.2356627Z ##[endgroup]

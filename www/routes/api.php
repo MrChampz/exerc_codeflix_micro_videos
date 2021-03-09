@@ -38,4 +38,10 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         'CastMemberController',
         $exceptCreateAndEdit
     );
+
+    Route::resource(
+        'videos',
+        'VideoController',
+        $exceptCreateAndEdit
+    );
 });

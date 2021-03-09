@@ -1,0 +1,12 @@
+2021-03-06T08:55:21.8291540Z ##[group]Run docker exec -t app php /var/www/vendor/bin/phpunit -c /var/www/phpunit.xml
+2021-03-06T08:55:21.8292545Z [36;1mdocker exec -t app php /var/www/vendor/bin/phpunit -c /var/www/phpunit.xml[0m
+2021-03-06T08:55:21.8332055Z shell: /bin/bash -e {0}
+2021-03-06T08:55:21.8332487Z ##[endgroup]
+2021-03-06T08:55:22.0387501Z stty: standard input
+2021-03-06T08:55:22.0402660Z PHPUnit 9.5.2 by Sebastian Bergmann and contributors.
+2021-03-06T08:55:22.0407221Z 
+2021-03-06T08:55:26.3489382Z .........................................................         57 / 57 (100%)
+2021-03-06T08:55:26.3489871Z 
+2021-03-06T08:55:26.3490416Z Time: 00:04.308, Memory: 36.00 MB
+2021-03-06T08:55:26.3490696Z 
+2021-03-06T08:55:26.3494224Z [30;42mOK (57 tests, 235 assertions)[0m
