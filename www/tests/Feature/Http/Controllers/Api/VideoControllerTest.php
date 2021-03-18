@@ -60,29 +60,30 @@ class VideoControllerTest extends TestCase
     {
         $category = Category::factory()->create();
         $genre = Genre::factory()->create();
+        $genre->categories()->sync($category->id);
 
         $data = [
             [
                 'send_data' => $this->sendData + [
-                    'categories' => [$category->id],
-                    'genres' => [$genre->id]
-                ],
+                        'categories' => [$category->id],
+                        'genres' => [$genre->id]
+                    ],
                 'test_data' => $this->sendData + ['opened' => false]
             ],
             [
                 'send_data' => $this->sendData + [
-                    'categories' => [$category->id],
-                    'genres' => [$genre->id],
-                    'opened' => true
-                ],
+                        'categories' => [$category->id],
+                        'genres' => [$genre->id],
+                        'opened' => true
+                    ],
                 'test_data' => $this->sendData + ['opened' => true]
             ],
             [
                 'send_data' => $this->sendData + [
-                    'categories' => [$category->id],
-                    'genres' => [$genre->id],
-                    'rating' => Video::RATING_LIST[1]
-                ],
+                        'categories' => [$category->id],
+                        'genres' => [$genre->id],
+                        'rating' => Video::RATING_LIST[1]
+                    ],
                 'test_data' => $this->sendData + ['rating' => Video::RATING_LIST[1]]
             ]
         ];
@@ -96,6 +97,14 @@ class VideoControllerTest extends TestCase
                 'created_at',
                 'updated_at'
             ]);
+            $this->assertHasCategory(
+                $response->json('id'),
+                $value['send_data']['categories'][0]
+            );
+            $this->assertHasGenre(
+                $response->json('id'),
+                $value['send_data']['genres'][0]
+            );
             $response = $this->assertUpdate(
                 $value['send_data'],
                 $value['test_data'] + ['deleted_at' => null]
@@ -104,33 +113,14 @@ class VideoControllerTest extends TestCase
                 'created_at',
                 'updated_at'
             ]);
-        }
-    }
-
-    public function testRollbackStore()
-    {
-        $controller = \Mockery::mock(VideoController::class)
-            ->makePartial()
-            ->shouldAllowMockingProtectedMethods();
-        $controller
-            ->shouldReceive('validate')
-            ->withAnyArgs()
-            ->andReturn($this->sendData);
-        $controller
-            ->shouldReceive('rulesStore')
-            ->withAnyArgs()
-            ->andReturn([]);
-        $controller
-            ->shouldReceive('handleRelations')
-            ->once()
-            ->andThrow(new TestException());
-
-        $request = \Mockery::mock(Request::class);
-
-        try {
-            $controller->store($request);
-        } catch (TestException $exception) {
-            $this->assertCount(1, Video::all());
+            $this->assertHasCategory(
+                $response->json('id'),
+                $value['send_data']['categories'][0]
+            );
+            $this->assertHasGenre(
+                $response->json('id'),
+                $value['send_data']['genres'][0]
+            );
         }
     }
 
@@ -206,6 +196,12 @@ class VideoControllerTest extends TestCase
         $data = ['categories' => [100]];
         $this->assertInvalidationInStoreAction($data, 'exists');
         $this->assertInvalidationInUpdateAction($data, 'exists');
+
+        $category = Category::factory()->create();
+        $category->delete();
+        $data = ['categories' => [$category->id]];
+        $this->assertInvalidationInStoreAction($data, 'exists');
+        $this->assertInvalidationInUpdateAction($data, 'exists');
     }
 
     public function testInvalidationGenresField()
@@ -217,6 +213,28 @@ class VideoControllerTest extends TestCase
         $data = ['genres' => [100]];
         $this->assertInvalidationInStoreAction($data, 'exists');
         $this->assertInvalidationInUpdateAction($data, 'exists');
+
+        $genre = Genre::factory()->create();
+        $genre->delete();
+        $data = ['genres' => [$genre->id]];
+        $this->assertInvalidationInStoreAction($data, 'exists');
+        $this->assertInvalidationInUpdateAction($data, 'exists');
+    }
+
+    protected function assertHasCategory($videoId, $categoryId)
+    {
+        $this->assertDatabaseHas('category_video', [
+            'video_id' => $videoId,
+            'category_id' => $categoryId
+        ]);
+    }
+
+    protected function assertHasGenre($videoId, $genreId)
+    {
+        $this->assertDatabaseHas('genre_video', [
+            'video_id' => $videoId,
+            'genre_id' => $genreId
+        ]);
     }
 
     protected function routeStore()
