@@ -31,6 +31,11 @@ jobs:
       - name: Run Laravel key:generate
         run: docker exec -t app php /var/www/artisan key:generate
 
+      - name: Clear config and cache
+        run: |
+          docker exec -t app php /var/www/artisan config:clear
+          docker exec -t app php /var/www/artisan cache:clear
+
       - name: Run migrations
         run: docker exec -t app php /var/www/artisan migrate
 
