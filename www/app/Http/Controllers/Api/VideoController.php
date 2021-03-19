@@ -20,7 +20,8 @@ class VideoController extends BasicCrudController
             'rating' => 'required|in:' . implode(',', Video::RATING_LIST),
             'duration' => 'required|integer',
             'categories' => 'required|array|exists:categories,id,deleted_at,NULL',
-            'genres' => ['required', 'array', 'exists:genres,id,deleted_at,NULL']
+            'genres' => ['required', 'array', 'exists:genres,id,deleted_at,NULL'],
+            'video_file' => 'required'
         ];
     }
 
@@ -28,12 +29,7 @@ class VideoController extends BasicCrudController
     {
         $this->addGenreHasCategoriesRule($request);
         $params = $this->validate($request, $this->rulesStore());
-        $self = $this;
-        $video = \DB::transaction(function () use ($request, $params, $self) {
-            $video = $this->model()::create($params);
-            $self->handleRelations($video, $request);
-            return $video;
-        });
+        $video = $this->model()::create($params);
         $video->refresh();
         return $video;
     }
@@ -43,19 +39,8 @@ class VideoController extends BasicCrudController
         $video = $this->findOrFail($id);
         $this->addGenreHasCategoriesRule($request);
         $params = $this->validate($request, $this->rulesUpdate());
-        $self = $this;
-        $video = \DB::transaction(function () use ($request, $params, $self, $video) {
-            $video->update($params);
-            $self->handleRelations($video, $request);
-            return $video;
-        });
+        $video->update($params);
         return $video;
-    }
-
-    protected function handleRelations(Video $video, Request $request)
-    {
-        $video->categories()->sync($request->get('categories'));
-        $video->genres()->sync($request->get('genres'));
     }
 
     protected function addGenreHasCategoriesRule(Request $request)
