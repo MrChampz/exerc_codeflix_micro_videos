@@ -32,7 +32,7 @@ jobs:
         run: docker exec -t app php /var/www/artisan key:generate
 
       - name: Run migrations
-        run: docker exec -t app php /var/www/artisan migrate
+        run: docker exec -t app php /var/www/artisan migrate:fresh
 
       - name: Run PHPUnit
         run: docker exec -t app php /var/www/vendor/bin/phpunit -c /var/www/phpunit.xml
