@@ -8,12 +8,12 @@ use Tests\TestCase;
 
 class UploadFilesUnitTest extends TestCase
 {
-    private $trait;
+    private $obj;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->trait = new UploadFilesStub();
+        $this->obj = new UploadFilesStub();
     }
 
     public function testUploadFile()
@@ -21,7 +21,7 @@ class UploadFilesUnitTest extends TestCase
         \Storage::fake();
         $file = UploadedFile::fake()->create('video.mp4');
 
-        $this->trait->uploadFile($file);
+        $this->obj->uploadFile($file);
 
         \Storage::assertExists("1/{$file->hashName()}");
     }
@@ -32,9 +32,24 @@ class UploadFilesUnitTest extends TestCase
         $file1 = UploadedFile::fake()->create('video1.mp4');
         $file2 = UploadedFile::fake()->create('video2.mp4');
 
-        $this->trait->uploadFiles([$file1, $file2]);
+        $this->obj->uploadFiles([$file1, $file2]);
 
         \Storage::assertExists("1/{$file1->hashName()}");
+        \Storage::assertExists("1/{$file2->hashName()}");
+    }
+
+    public function testDeleteOldFiles()
+    {
+        \Storage::fake();
+        $file1 = UploadedFile::fake()->create('video1.mp4')->size(1);
+        $file2 = UploadedFile::fake()->create('video2.mp4')->size(1);
+        $this->obj->uploadFiles([$file1, $file2]);
+        $this->obj->deleteOldFiles();
+        $this->assertCount(2, \Storage::allFiles());
+
+        $this->obj->oldFiles = [$file1->hashName()];
+        $this->obj->deleteOldFiles();
+        \Storage::assertMissing("1/{$file1->hashName()}");
         \Storage::assertExists("1/{$file2->hashName()}");
     }
 
@@ -45,15 +60,15 @@ class UploadFilesUnitTest extends TestCase
         $file = UploadedFile::fake()->create('video.mp4');
         $filename = $file->hashName();
 
-        $this->trait->uploadFile($file);
-        $this->trait->deleteFile($filename);
+        $this->obj->uploadFile($file);
+        $this->obj->deleteFile($filename);
         \Storage::assertMissing("1/{$filename}");
 
         $file = UploadedFile::fake()->create('video.mp4');
         $filename = $file->hashName();
 
-        $this->trait->uploadFile($file);
-        $this->trait->deleteFile($file);
+        $this->obj->uploadFile($file);
+        $this->obj->deleteFile($file);
         \Storage::assertMissing("1/{$filename}");
     }
 
@@ -63,8 +78,8 @@ class UploadFilesUnitTest extends TestCase
         $file1 = UploadedFile::fake()->create('video1.mp4');
         $file2 = UploadedFile::fake()->create('video2.mp4');
 
-        $this->trait->uploadFiles([$file1, $file2]);
-        $this->trait->deleteFiles([$file1->hashName(), $file2]);
+        $this->obj->uploadFiles([$file1, $file2]);
+        $this->obj->deleteFiles([$file1->hashName(), $file2]);
 
         \Storage::assertMissing("1/{$file1->hashName()}");
         \Storage::assertMissing("1/{$file2->hashName()}");
@@ -77,39 +92,39 @@ class UploadFilesUnitTest extends TestCase
         $this->assertCount(0, $attributes);
         $this->assertCount(0, $files);
 
-        $data = ['film' => 'film_test'];
+        $data = ['file1' => 'film_test'];
         $attributes = $data;
         $files = UploadFilesStub::extractFiles($attributes);
         $this->assertCount(1, $attributes);
         $this->assertEquals($data, $attributes);
         $this->assertCount(0, $files);
 
-        $data = ['film' => 'film_test', 'trailer' => 'trailer_test'];
+        $data = ['file1' => 'film_test', 'file2' => 'trailer_test'];
         $attributes = $data;
         $files = UploadFilesStub::extractFiles($attributes);
         $this->assertCount(2, $attributes);
         $this->assertEquals($data, $attributes);
         $this->assertCount(0, $files);
 
-        $movie = UploadedFile::fake()->create('movie.mp4');
-        $attributes = ['film' => $movie, 'other' => 'test'];
+        $file1 = UploadedFile::fake()->create('video1.mp4');
+        $attributes = ['file1' => $file1, 'other' => 'test'];
         $files = UploadFilesStub::extractFiles($attributes);
         $this->assertCount(2, $attributes);
         $this->assertEquals([
-            'film' => $movie->hashName(),
+            'file1' => $file1->hashName(),
             'other' => 'test'
         ], $attributes);
-        $this->assertEquals([$movie], $files);
+        $this->assertEquals([$file1], $files);
 
-        $trailer = UploadedFile::fake()->create('trailer.mp4');
-        $attributes = ['film' => $movie, 'trailer' => $trailer, 'other' => 'test'];
+        $file2 = UploadedFile::fake()->create('video2.mp4');
+        $attributes = ['file1' => $file1, 'file2' => $file2, 'other' => 'test'];
         $files = UploadFilesStub::extractFiles($attributes);
         $this->assertCount(3, $attributes);
         $this->assertEquals([
-            'film' => $movie->hashName(),
-            'trailer' => $trailer->hashName(),
+            'file1' => $file1->hashName(),
+            'file2' => $file2->hashName(),
             'other' => 'test'
         ], $attributes);
-        $this->assertEquals([$movie, $trailer], $files);
+        $this->assertEquals([$file1, $file2], $files);
     }
 }
