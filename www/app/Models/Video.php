@@ -15,7 +15,8 @@ class Video extends Model
     const RATING_LIST = ['L', '10', '12', '14', '16', '18'];
 
     public static $fileFields = [
-        'video_file'
+        'video_file',
+        'thumb_file',
     ];
 
     public $incrementing = false;
@@ -27,7 +28,9 @@ class Video extends Model
         'year_launched',
         'opened',
         'rating',
-        'duration'
+        'duration',
+        'video_file',
+        'thumb_file'
     ];
 
     protected $casts = [
@@ -50,7 +53,7 @@ class Video extends Model
             return $video;
         } catch (\Exception $e) {
             if (isset($video)) {
-                // Excluir arquivos de upload
+                $video->deleteFiles($files);
             }
             \DB::rollBack();
             throw $e;
@@ -59,18 +62,21 @@ class Video extends Model
 
     public function update(array $attributes = [], array $options = [])
     {
+        $files = self::extractFiles($attributes);
         try {
             \DB::beginTransaction();
             $saved = parent::update($attributes, $options);
             static::handleRelations($this, $attributes);
             if ($saved) {
-                // Upload dos novos arquivos
-                // Excluir os antigos
+                $this->uploadFiles($files);
             }
             \DB::commit();
+            if ($saved && count($files)) {
+                $this->deleteOldFiles();
+            }
             return $saved;
         } catch (\Exception $e) {
-            // Excluir arquivos de upload
+            $this->deleteFiles($files);
             \DB::rollBack();
             throw $e;
         }

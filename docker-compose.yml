@@ -39,7 +39,7 @@ services:
       - ./.docker/dbdata:/var/lib/mysql
       - ./.docker/mysql:/docker-entrypoint-initdb.d
     environment:
-      - MYSQL_USER=root
+      - MYSQL_ROOT_HOST='%'
       - MYSQL_ROOT_PASSWORD=root
     networks:
       - app-network
