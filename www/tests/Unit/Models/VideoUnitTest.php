@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Models;
 
+use App\Models\Traits\UploadFiles;
 use App\Models\Traits\Uuid;
 use App\Models\Video;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,7 +24,12 @@ class VideoUnitTest extends TestCase
 
     public function testTraits()
     {
-        $traits = [HasFactory::class, SoftDeletes::class, Uuid::class];
+        $traits = [
+            HasFactory::class,
+            SoftDeletes::class,
+            Uuid::class,
+            UploadFiles::class
+        ];
         $videoTraits = array_keys(class_uses(Video::class));
         $this->assertEquals($traits, $videoTraits);
     }
@@ -46,7 +52,9 @@ class VideoUnitTest extends TestCase
             'year_launched',
             'opened',
             'rating',
-            'duration'
+            'duration',
+            'video_file',
+            'thumb_file'
         ];
         $this->assertEquals($fillable, $this->video->getFillable());
     }
