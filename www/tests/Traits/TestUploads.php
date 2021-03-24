@@ -26,9 +26,14 @@ trait TestUploads
         ];
 
         foreach ($routes as $route) {
-            $file = UploadedFile::fake()
-                ->create("$field.$extension")
-                ->mimeType("video/avi");
+            
+            if ($rule == 'image') {
+                $file = UploadedFile::fake()->image("$field.$extension");
+            } else {
+                $file = UploadedFile::fake()
+                    ->create("$field.$extension")
+                    ->mimeType("video/avi");
+            }
 
             $response = $this->json($route['method'], $route['route'], [
                $field => $file
