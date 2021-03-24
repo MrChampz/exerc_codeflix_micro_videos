@@ -14,13 +14,21 @@ class VideoUploadTest extends BaseVideoTestCase
         \Storage::fake();
         $video = Video::create(
             $this->data + [
+                'video_file' => UploadedFile::fake()
+                    ->create('video.mp4')
+                    ->mimeType('video/mp4'),
+                'trailer_file' => UploadedFile::fake()
+                    ->create('trailer.mp4')
+                    ->mimeType('video/mp4'),
                 'thumb_file' => UploadedFile::fake()->image('thumb.jpg'),
-                'video_file' => UploadedFile::fake()->image('video.mp4'),
+                'banner_file' => UploadedFile::fake()->image('banner.jpg'),
             ]
         );
 
-        \Storage::assertExists("{$video->id}/{$video->thumb_file}");
         \Storage::assertExists("{$video->id}/{$video->video_file}");
+        \Storage::assertExists("{$video->id}/{$video->trailer_file}");
+        \Storage::assertExists("{$video->id}/{$video->thumb_file}");
+        \Storage::assertExists("{$video->id}/{$video->banner_file}");
     }
 
     public function testCreateRollbackFiles()
@@ -34,8 +42,14 @@ class VideoUploadTest extends BaseVideoTestCase
         try {
              Video::create(
                 $this->data + [
+                    'video_file' => UploadedFile::fake()
+                        ->create('video.mp4')
+                        ->mimeType('video/mp4'),
+                    'trailer_file' => UploadedFile::fake()
+                        ->create('trailer.mp4')
+                        ->mimeType('video/mp4'),
                     'thumb_file' => UploadedFile::fake()->image('thumb.jpg'),
-                    'video_file' => UploadedFile::fake()->image('video.mp4'),
+                    'banner_file' => UploadedFile::fake()->image('banner.jpg'),
                 ]
             );
         } catch (TestException $e) {
@@ -51,24 +65,44 @@ class VideoUploadTest extends BaseVideoTestCase
         \Storage::fake();
         $video = Video::factory()->create();
         $thumbFile = UploadedFile::fake()->image("thumb.jpg");
-        $videoFile = UploadedFile::fake()->create("video.mp4");
+        $videoFile = UploadedFile::fake()
+            ->create("video.mp4")
+            ->mimeType('video/mp4');
+        $trailerFile = UploadedFile::fake()
+            ->create("trailer.mp4")
+            ->mimeType('video/mp4');
+        $thumbFile = UploadedFile::fake()->image("thumb.jpg");
+        $bannerFile = UploadedFile::fake()->image("banner.jpg");
 
         $video->update($this->data + [
-            'thumb_file' => $thumbFile,
             'video_file' => $videoFile,
+            'trailer_file' => $trailerFile,
+            'thumb_file' => $thumbFile,
+            'banner_file' => $bannerFile,
         ]);
 
-        \Storage::assertExists("{$video->id}/{$video->thumb_file}");
         \Storage::assertExists("{$video->id}/{$video->video_file}");
+        \Storage::assertExists("{$video->id}/{$video->trailer_file}");
+        \Storage::assertExists("{$video->id}/{$video->thumb_file}");
+        \Storage::assertExists("{$video->id}/{$video->banner_file}");
 
-        $newVideoFile = UploadedFile::fake()->image('video.mp4');
+        $newVideoFile = UploadedFile::fake()
+            ->create('video.mp4')
+            ->mimetype('video/mp4');
+        $newBannerFile = UploadedFile::fake()->image('banner.png');
         $video->update($this->data + [
-            'video_file' => $newVideoFile
+            'video_file' => $newVideoFile,
+            'banner_file' => $newBannerFile,
         ]);
-
+        
         \Storage::assertExists("{$video->id}/{$thumbFile->hashName()}");
+        \Storage::assertExists("{$video->id}/{$trailerFile->hashName()}");
+
         \Storage::assertExists("{$video->id}/{$newVideoFile->hashName()}");
         \Storage::assertMissing("{$video->id}/{$videoFile->hashName()}");
+
+        \Storage::assertExists("{$video->id}/{$newBannerFile->hashName()}");
+        \Storage::assertMissing("{$video->id}/{$bannerFile->hashName()}");
     }
 
     public function testUpdateRollbackFiles()
@@ -83,8 +117,14 @@ class VideoUploadTest extends BaseVideoTestCase
         try {
             $video->update(
                 $this->data + [
+                    'video_file' => UploadedFile::fake()
+                        ->create('video.mp4')
+                        ->mimeType('video/mp4'),
+                    'trailer_file' => UploadedFile::fake()
+                        ->create('trailer.mp4')
+                        ->mimeType('video/mp4'),
                     'thumb_file' => UploadedFile::fake()->image('thumb.jpg'),
-                    'video_file' => UploadedFile::fake()->image('video.mp4'),
+                    'banner_file' => UploadedFile::fake()->image('banner.jpg'),
                 ]
             );
         } catch (TestException $e) {

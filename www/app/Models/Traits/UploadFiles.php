@@ -62,6 +62,15 @@ trait UploadFiles
         \Storage::delete("{$this->uploadDir()}/{$filename}");
     }
 
+    /**
+     * @param string|null $filename
+     */
+    public function getFileUrl($filename)
+    {
+        if (!$filename) return '';
+        return \Storage::url("{$this->uploadDir()}/{$filename}");
+    }
+
     public static function extractFiles(array &$attributes = [])
     {
         $files = [];

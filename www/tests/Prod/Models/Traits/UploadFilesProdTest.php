@@ -87,4 +87,15 @@ class UploadFilesProdTest extends TestCase
         \Storage::assertMissing("1/{$file1->hashName()}");
         \Storage::assertMissing("1/{$file2->hashName()}");
     }
+
+    public function testGetFileUrl()
+    {
+        $file = UploadedFile::fake()->create('video.mp4');
+
+        $this->obj->uploadFile($file);
+        $url = $this->obj->getFileUrl($file->hashName());
+
+        $this->assertStringContainsString("https://", $url);
+        $this->assertStringContainsString("/1/{$file->hashName()}", $url);
+    }
 }
