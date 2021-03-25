@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers\Api\VideoController;
 use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Video;
+use Illuminate\Support\Arr;
 use Tests\Traits\TestSaves;
 use Tests\Traits\TestValidations;
 
@@ -35,33 +36,23 @@ class VideoControllerCrudTest extends BaseVideoControllerTestCase
 
     public function testSaveWithoutFiles()
     {
-        $category = Category::factory()->create();
-        $genre = Genre::factory()->create();
-        $genre->categories()->sync($category->id);
-
+        $testData = Arr::except($this->sendData, ['categories', 'genres']);
         $data = [
             [
-                'send_data' => $this->sendData + [
-                    'categories' => [$category->id],
-                    'genres' => [$genre->id]
-                ],
-                'test_data' => $this->sendData + ['opened' => false]
+                'send_data' => $this->sendData,
+                'test_data' => $testData + ['opened' => false]
             ],
             [
                 'send_data' => $this->sendData + [
-                    'categories' => [$category->id],
-                    'genres' => [$genre->id],
                     'opened' => true
                 ],
-                'test_data' => $this->sendData + ['opened' => true]
+                'test_data' => $testData + ['opened' => true]
             ],
             [
                 'send_data' => $this->sendData + [
-                    'categories' => [$category->id],
-                    'genres' => [$genre->id],
                     'rating' => Video::RATING_LIST[1]
                 ],
-                'test_data' => $this->sendData + ['rating' => Video::RATING_LIST[1]]
+                'test_data' => $testData + ['rating' => Video::RATING_LIST[1]]
             ]
         ];
 

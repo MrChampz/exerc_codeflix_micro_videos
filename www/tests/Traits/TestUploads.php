@@ -27,7 +27,7 @@ trait TestUploads
 
         foreach ($routes as $route) {
             if ($rule == 'image') {
-                $file = UploadedFile::fake()->image("$field.$extension");
+                $file = UploadedFile::fake()->create("$field.1$extension");
             } else {
                 $file = UploadedFile::fake()
                     ->create("$field.$extension")
@@ -54,6 +54,14 @@ trait TestUploads
                 'max.file',
                 ['max' => $maxSize]
             );
+        }
+    }
+
+    protected function assertFilesExistsInStorage($model, array $files)
+    {
+        /** UploadFiles $model */
+        foreach ($files as $file) {
+            \Storage::assertExists($model->relativeFilePath($file->hashName()));
         }
     }
 }
