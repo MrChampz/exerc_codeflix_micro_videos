@@ -14,7 +14,7 @@ return [
     */
 
     'default' => env('FILESYSTEM_DRIVER', 'local'),
-    
+
     'cloud' => env('FILESYSTEM_CLOUD', 's3'),
 
     /*
@@ -35,6 +35,12 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
+        ],
+
+        'video_local' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/videos'),
+            'url' => env('APP_URL').'/storage/videos',
         ],
 
         'public' => [

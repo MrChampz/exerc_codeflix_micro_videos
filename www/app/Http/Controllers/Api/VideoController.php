@@ -22,10 +22,10 @@ class VideoController extends BasicCrudController
             'duration' => 'required|integer',
             'categories' => 'required|array|exists:categories,id,deleted_at,NULL',
             'genres' => ['required', 'array', 'exists:genres,id,deleted_at,NULL'],
-            'video_file' => 'mimetypes:video/mp4|max:52428800',
-            'trailer_file' => 'mimetypes:video/mp4|max:1048576',
-            'thumb_file' => 'image|max:5120',
-            'banner_file' => 'image|max:10240',
+            'video_file' => 'mimetypes:video/mp4|max:' . Video::VIDEO_FILE_MAX_SIZE,
+            'trailer_file' => 'mimetypes:video/mp4|max:' . Video::TRAILER_FILE_MAX_SIZE,
+            'thumb_file' => 'image|max:' . Video::THUMB_FILE_MAX_SIZE,
+            'banner_file' => 'image|max:' . Video::BANNER_FILE_MAX_SIZE,
         ];
     }
 
@@ -70,12 +70,12 @@ class VideoController extends BasicCrudController
     {
         return Video::class;
     }
-
+    
     protected function resource()
     {
         return VideoResource::class;
     }
-
+    
     protected function resourceCollection()
     {
         return $this->resource();
