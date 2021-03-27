@@ -13,6 +13,7 @@ class UploadFilesProdTest extends TestCase
     use TestStorages, TestProd;
 
     private $obj;
+    private $baseUrl;
 
     protected function setUp(): void
     {
@@ -22,6 +23,8 @@ class UploadFilesProdTest extends TestCase
         $this->obj = new UploadFilesStub();
         \Config::set('filesystems.default', 's3');
         $this->deleteAllFiles();
+
+        $this->baseUrl = config('filesystems.disks.s3.url');
     }
 
     public function testUploadFile()
@@ -95,7 +98,6 @@ class UploadFilesProdTest extends TestCase
         $this->obj->uploadFile($file);
         $url = $this->obj->getFileUrl($file->hashName());
 
-        $this->assertStringContainsString("https://", $url);
-        $this->assertStringContainsString("/1/{$file->hashName()}", $url);
+        $this->assertEquals("{$this->baseUrl}/1/{$file->hashName()}", $url);
     }
 }
