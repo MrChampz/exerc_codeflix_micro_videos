@@ -40,7 +40,7 @@ services:
     restart: always
     tty: true
     ports:
-      - "3306:3306"
+      - "33006:3306"
     volumes:
       - ./.docker/dbdata:/var/lib/mysql
       - ./.docker/mysql:/docker-entrypoint-initdb.d
