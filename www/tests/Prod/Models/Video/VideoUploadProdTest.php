@@ -32,7 +32,7 @@ class VideoUploadProdTest extends TestCase
         
         foreach ($fileFields as $field => $value) {
             $fileUrl = $video->{"{$field}_url"};
-            dump("BaseUrl: $baseUrl});
+            dump("BaseUrl: $baseUrl");
             $this->assertEquals("{$baseUrl}/$video->id/$value", $fileUrl);
         }
     }
