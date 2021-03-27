@@ -95,7 +95,6 @@ class UploadFilesProdTest extends TestCase
         $this->obj->uploadFile($file);
         $url = $this->obj->getFileUrl($file->hashName());
 
-        $this->assertStringContainsString("https://", $url);
-        $this->assertStringContainsString("/1/{$file->hashName()}", $url);
+        $this->assertEquals("1/{$file->hashName()}", $url);
     }
 }
