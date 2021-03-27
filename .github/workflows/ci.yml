@@ -19,6 +19,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
+          AWS_URL: ${{ secrets.AWS_URL }}
           TESTING_PROD: ${{ secrets.TESTING_PROD }}
         run: docker-compose -f docker-compose.prod.yml up -d
 
