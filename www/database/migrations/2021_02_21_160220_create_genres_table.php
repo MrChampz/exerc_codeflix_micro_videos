@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateGenresTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('genres', function (Blueprint $table) {
@@ -21,12 +16,7 @@ class CreateGenresTable extends Migration
             $table->timestamps();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+    
     public function down()
     {
         Schema::dropIfExists('genres');

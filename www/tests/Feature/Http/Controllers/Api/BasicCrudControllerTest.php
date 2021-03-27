@@ -35,9 +35,12 @@ class BasicCrudControllerTest extends TestCase
             'description' => 'test_description'
         ]);
 
-        $result = $this->controller->index()->toArray();
+        $result = $this->controller->index();
+        $serialized = $result->response()->getData(true);
 
-        $this->assertEquals([$category->toArray()], $result);
+        $this->assertEquals([$category->toArray()], $serialized['data']);
+        $this->assertArrayHasKey('meta', $serialized);
+        $this->assertArrayHasKey('links', $serialized);
     }
 
     public function testShow()
@@ -48,8 +51,9 @@ class BasicCrudControllerTest extends TestCase
         ]);
 
         $result = $this->controller->show($category->id);
+        $serialized = $result->response()->getData(true);
 
-        $this->assertEquals($result->toArray(), CategoryStub::find(1)->toArray());
+        $this->assertEquals($category->toArray(), $serialized['data']);
     }
 
     public function testStore()
@@ -63,9 +67,10 @@ class BasicCrudControllerTest extends TestCase
                 'description' => 'test_description'
             ]);
 
-        $obj = $this->controller->store($request);
+        $result = $this->controller->store($request);
+        $serialized = $result->response()->getData(true);
 
-        $this->assertEquals(CategoryStub::find(1)->toArray(), $obj->toArray());
+        $this->assertEquals(CategoryStub::first()->toArray(), $serialized['data']);
     }
 
     public function testInvalidationDataInStore()
@@ -98,8 +103,10 @@ class BasicCrudControllerTest extends TestCase
             ]);
 
         $result = $this->controller->update($request, $category->id);
+        $serialized = $result->response()->getData(true);
+        $category->refresh();
 
-        $this->assertEquals($result->toArray(), CategoryStub::find(1)->toArray());
+        $this->assertEquals($category->toArray(), $serialized['data']);
     }
 
     public function testInvalidationDataInUpdate()

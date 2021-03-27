@@ -64,6 +64,7 @@ class VideoUploadTest extends BaseVideoTestCase
     {
         \Storage::fake();
         $video = Video::factory()->create();
+        $thumbFile = UploadedFile::fake()->image("thumb.jpg");
         $videoFile = UploadedFile::fake()
             ->create("video.mp4")
             ->mimeType('video/mp4');
@@ -93,10 +94,10 @@ class VideoUploadTest extends BaseVideoTestCase
             'video_file' => $newVideoFile,
             'banner_file' => $newBannerFile,
         ]);
-
+        
         \Storage::assertExists("{$video->id}/{$thumbFile->hashName()}");
         \Storage::assertExists("{$video->id}/{$trailerFile->hashName()}");
-        
+
         \Storage::assertExists("{$video->id}/{$newVideoFile->hashName()}");
         \Storage::assertMissing("{$video->id}/{$videoFile->hashName()}");
 
@@ -132,5 +133,30 @@ class VideoUploadTest extends BaseVideoTestCase
         }
 
         $this->assertTrue($hasError);
+    }
+
+    public function testFileUrlsWithLocalDriver()
+    {
+        $fileFields = [];
+        foreach (Video::$fileFields as $field) {
+            $fileFields[$field] = "$field.test";
+        }
+        $video = Video::factory()->create($fileFields);
+        $localDriver = config('filesystems.default');
+        $baseUrl = config('filesystems.disks.' . $localDriver)['url'];
+
+        foreach ($fileFields as $field => $value) {
+            $fileUrl = $video->{"{$field}_url"};
+            $this->assertEquals("{$baseUrl}/$video->id/$value", $fileUrl);
+        }
+    }
+
+    public function testFileUrlsEmptinessWhenFieldsAreNull()
+    {
+        $video = Video::factory()->create();
+        foreach (Video::$fileFields as $field) {
+            $fileUrl = $video->{"{$field}_url"};
+            $this->assertEquals("", $fileUrl);
+        }
     }
 }
