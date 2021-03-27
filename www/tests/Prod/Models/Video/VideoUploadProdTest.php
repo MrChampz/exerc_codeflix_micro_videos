@@ -4,6 +4,7 @@ namespace Tests\Prod\Models\Video;
 
 use App\Models\Video;
 use Illuminate\Database\Events\TransactionCommitted;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Tests\Exceptions\TestException;
 use Tests\TestCase;
@@ -11,7 +12,7 @@ use Tests\Traits\TestProd;
 
 class VideoUploadProdTest extends TestCase
 {
-    use TestProd;
+    use DatabaseMigrations, TestProd;
 
     protected function setUp(): void
     {
