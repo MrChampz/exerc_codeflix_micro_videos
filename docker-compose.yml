@@ -5,8 +5,14 @@ services:
     build: .
     container_name: micro-videos-app
     entrypoint: dockerize -wait tcp://db:3306 -timeout 40s /entrypoint.sh
+    ports:
+      - "3000:3000"
+      - "35729:35729"
+    environment: 
+      - CHOKIDAR_USEPOLLING=true
     volumes:
-      - ./www:/var/www
+      - ./frontend:/var/www/frontend
+      - ./backend/www:/var/www/backend
     networks:
       - app-network
     depends_on:
@@ -21,7 +27,7 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ./www:/var/www
+      - ./backend/www:/var/www/backend
     networks:
       - app-network
     depends_on:

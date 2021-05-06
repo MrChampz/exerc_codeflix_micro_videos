@@ -1,4 +1,6 @@
-FROM php:7.3.6-fpm-alpine3.9
+FROM php:7.3.6-fpm-alpine3.10
+
+RUN touch /root/.bashrc | echo "PS1='\w\$ '" >> /root/.bashrc
 
 RUN apk add --no-cache openssl \
                        bash \
@@ -21,6 +23,9 @@ ENV DOCKERIZE_VERSION v0.6.1
 RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+
+RUN apk add --no-cache shadow && \
+    usermod -u 1000 www-data
 
 WORKDIR /var/www
 RUN rm -rf /var/www/html

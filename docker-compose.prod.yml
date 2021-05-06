@@ -12,7 +12,7 @@ services:
       - AWS_URL=${AWS_URL}
       - TESTING_PROD=${TESTING_PROD}
     volumes:
-      - ./www:/var/www
+      - ./backend/www:/var/www/backend
     networks:
       - app-network
     depends_on:
@@ -27,7 +27,8 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ./www:/var/www
+      - ./frontend:/var/www/frontend
+      - ./backend/www:/var/www/backend
     networks:
       - app-network
     depends_on:
