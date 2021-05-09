@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Chip } from '@material-ui/core';
 import MUIDataTable, { MUIDataTableColumn } from 'mui-datatables';
 import { format, parseISO } from 'date-fns';
-import { httpVideo } from '../../util/http';
+import CategoryResource from '../../util/http/category-resource';
 
 const columns: MUIDataTableColumn[] = [
   {
@@ -36,7 +36,8 @@ const Table: React.FC = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    httpVideo.get('categories')
+    CategoryResource
+      .list()
       .then(res => setData(res.data.data));
   }, []);
 

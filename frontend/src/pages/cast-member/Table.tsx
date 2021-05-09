@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import MUIDataTable, { MUIDataTableColumn } from 'mui-datatables';
 import { format, parseISO } from 'date-fns';
-import { httpVideo } from '../../util/http';
+import CastMemberResource from '../../util/http/cast-member-resource';
 
-const TYPE_ACTOR = 1;
-const TYPE_DIRECTOR = 2;
+const CastMemberTypeMap = {
+  1: 'Ator',
+  2: 'Diretor',
+}
 
 const columns: MUIDataTableColumn[] = [
   {
@@ -16,9 +18,7 @@ const columns: MUIDataTableColumn[] = [
     label: "Tipo",
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
-        return value === TYPE_DIRECTOR ? "Diretor" :
-               value === TYPE_ACTOR ? "Ator" :
-               "Desconhecido";
+        return CastMemberTypeMap[value];
       }
     },
   },
@@ -37,13 +37,14 @@ const Table: React.FC = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    httpVideo.get('cast_members')
+    CastMemberResource
+      .list()
       .then(res => setData(res.data.data));
   }, []);
 
   return (
     <MUIDataTable
-      title="Listagem de membros do elenco"
+      title="Listagem de membros de elencos"
       columns={ columns }
       data={ data }
     />

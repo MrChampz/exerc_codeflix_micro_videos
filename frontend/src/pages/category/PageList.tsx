@@ -5,15 +5,15 @@ import AddIcon from '@material-ui/icons/Add';
 import Page from '../../components/Page';
 import Table from './Table';
 
-const ListPage: React.FC = () => {
+const PageList: React.FC = () => {
   return (
-    <Page title="Listagem de membros do elenco">
+    <Page title="Listagem de categorias">
       <Box dir="rtl">
         <Fab
-          title="Adicionar membro"
+          title="Adicionar categoria"
           size="small"
           component={ Link }
-          to="/cast_members/create"
+          to="/categories/create"
         >
           <AddIcon />
         </Fab>
@@ -25,4 +25,4 @@ const ListPage: React.FC = () => {
   );
 }
 
-export default ListPage;
+export default PageList;

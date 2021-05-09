@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Chip } from '@material-ui/core';
 import MUIDataTable, { MUIDataTableColumn } from 'mui-datatables';
 import { format, parseISO } from 'date-fns';
-import { httpVideo } from '../../util/http';
+import GenreResource from '../../util/http/genre-resource';
 
 const columns: MUIDataTableColumn[] = [
   {
@@ -14,7 +14,7 @@ const columns: MUIDataTableColumn[] = [
     label: "Categorias",
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
-        return value.reduce((acc: any, value: any) => acc += (value.name + ', '), '');
+        return value.map(category => category.name).join(', ');
       }
     },
   },
@@ -45,7 +45,8 @@ const Table: React.FC = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    httpVideo.get('genres')
+    GenreResource
+      .list()
       .then(res => setData(res.data.data));
   }, []);
 
