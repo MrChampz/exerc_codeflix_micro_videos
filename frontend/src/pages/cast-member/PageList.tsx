@@ -8,9 +8,10 @@ import Table from './Table';
 const PageList: React.FC = () => {
   return (
     <Page title="Listagem de membros de elencos">
-      <Box dir="rtl">
+      <Box dir="rtl" paddingBottom={2}>
         <Fab
           title="Adicionar membro"
+          color="secondary"
           size="small"
           component={ Link }
           to="/cast_members/create"

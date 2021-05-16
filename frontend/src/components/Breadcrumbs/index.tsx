@@ -51,7 +51,7 @@ const Breadcrumbs: React.FC = () => {
   
   return (
     <Container>
-      <Box paddingBottom={2}>
+      <Box paddingTop={2} paddingBottom={1}>
         <Route>
           {({ location }) => makeBreadcrumb(location)}
         </Route>

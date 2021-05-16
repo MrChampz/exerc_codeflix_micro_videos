@@ -1,2 +1,2 @@
 export { default as GenreList } from './PageList';
-export { default as GenreCreate } from './PageForm';
+export { default as GenreForm } from './PageForm';

@@ -1,19 +1,26 @@
 import React from 'react';
-import { Box } from '@material-ui/core';
+import { Box, CssBaseline, MuiThemeProvider } from '@material-ui/core';
 import { BrowserRouter } from 'react-router-dom';
-import { Navbar, Breadcrumbs } from './components';
+
+import { Navbar, Breadcrumbs, SnackbarProvider } from './components';
 import Router from './routes/Router';
+import theme from './theme';
 
 const App: React.FC = () => {
   return (
     <React.Fragment>
-      <BrowserRouter>
-        <Navbar />
-        <Box paddingTop="70px">
-          <Breadcrumbs />
-          <Router />
-        </Box>
-      </BrowserRouter>
+      <MuiThemeProvider theme={ theme }>
+        <SnackbarProvider>
+          <CssBaseline />
+          <BrowserRouter>
+            <Navbar />
+            <Box paddingTop="70px">
+              <Breadcrumbs />
+              <Router />
+            </Box>
+          </BrowserRouter>
+        </SnackbarProvider>
+      </MuiThemeProvider>
     </React.Fragment>
   );
 }

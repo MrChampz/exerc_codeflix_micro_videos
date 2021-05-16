@@ -1,5 +1,13 @@
 import { RouteProps as RouterDomRouteProps } from 'react-router-dom';
-import { Dashboard, CategoryList, CastMemberList, GenreList, CategoryCreate, GenreCreate, CastMemberCreate } from '../pages';
+import {
+  Dashboard,
+  CategoryList,
+  CastMemberList,
+  GenreList, 
+  CategoryForm, 
+  GenreForm, 
+  CastMemberForm 
+} from '../pages';
 
 export interface RouteProps extends RouterDomRouteProps {
   name: string;
@@ -25,7 +33,14 @@ const routes: RouteProps[] = [
     name: 'categories.create',
     label: 'Criar categoria',
     path: '/categories/create',
-    component: CategoryCreate,
+    component: CategoryForm,
+    exact: true
+  },
+  {
+    name: 'categories.edit',
+    label: 'Editar categoria',
+    path: '/categories/:id/edit',
+    component: CategoryForm,
     exact: true
   },
   {
@@ -39,7 +54,14 @@ const routes: RouteProps[] = [
     name: 'cast_members.create',
     label: 'Criar membro de elenco',
     path: '/cast_members/create',
-    component: CastMemberCreate,
+    component: CastMemberForm,
+    exact: true
+  },
+  {
+    name: 'cast_members.edit',
+    label: 'Editar membro de elenco',
+    path: '/cast_members/:id/edit',
+    component: CastMemberForm,
     exact: true
   },
   {
@@ -53,7 +75,14 @@ const routes: RouteProps[] = [
     name: 'genres.create',
     label: 'Criar gênero',
     path: '/genres/create',
-    component: GenreCreate,
+    component: GenreForm,
+    exact: true
+  },
+  {
+    name: 'genres.edit',
+    label: 'Editar gênero',
+    path: '/genres/:id/edit',
+    component: GenreForm,
     exact: true
   },
 ];

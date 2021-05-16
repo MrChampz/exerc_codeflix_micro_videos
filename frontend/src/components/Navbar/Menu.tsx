@@ -3,14 +3,15 @@ import { IconButton, Menu as MuiMenu, MenuItem } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import MenuIcon from '@material-ui/icons/Menu';
 import routes, { RouteProps } from '../../routes';
+import { getNameOfJSDocTypedef } from 'typescript';
 
-const listRoutes = [
-  'dashboard',
-  'categories.list',
-  'genres.list',
-  'cast_members.list',
-];
-const menuRoutes = routes.filter(route => listRoutes.includes(route.name));
+const listRoutes = {
+  'dashboard': 'Dashboard',
+  'categories.list': 'Categorias',
+  'genres.list': 'Gêneros',
+  'cast_members.list': 'Membros de elenco',
+};
+const menuRoutes = routes.filter(route => Object.keys(listRoutes).includes(route.name));
 
 const Menu: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -41,7 +42,7 @@ const Menu: React.FC = () => {
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         getContentAnchorEl={ null }
       >
-        { listRoutes.map((name, key) => {
+        { Object.keys(listRoutes).map((name, key) => {
           const route = menuRoutes.find(route => route.name === name) as RouteProps;
           return (
             <MenuItem
@@ -50,7 +51,7 @@ const Menu: React.FC = () => {
               to={ route.path as string }
               onClick={ handleClose }
             >
-              { route.label }
+              { listRoutes[name] }
             </MenuItem>
           );
         })}

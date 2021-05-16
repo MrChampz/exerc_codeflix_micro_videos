@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Chip } from '@material-ui/core';
 import MUIDataTable, { MUIDataTableColumn } from 'mui-datatables';
 import { format, parseISO } from 'date-fns';
 import GenreResource from '../../util/http/genre-resource';
+import { BadgeActive, BadgeInactive } from '../../components/Badge';
 
 const columns: MUIDataTableColumn[] = [
   {
@@ -23,11 +23,8 @@ const columns: MUIDataTableColumn[] = [
     label: "Status",
     options: {
       customBodyRender: (value, tableMeta, updateValue) => {
-        return value ? (
-          <Chip label="Ativo" color="primary" />
-        ) : (
-          <Chip label="Inativo" color="secondary" />
-        )}
+        return value ? <BadgeActive /> : <BadgeInactive />;
+      }
     },
   },
   {

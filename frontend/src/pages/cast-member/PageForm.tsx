@@ -1,11 +1,13 @@
 import React from 'react';
 import { Box } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 import Page from '../../components/Page';
 import Form from './Form';
 
 const PageForm: React.FC = () => {
+  const { id } = useParams<{ id?: string }>();
   return (
-    <Page title="Criar membro de elenco">
+    <Page title={ !id ? "Criar membro de elenco" : "Editar membro de elenco" }>
       <Box>
         <Form />
       </Box>
