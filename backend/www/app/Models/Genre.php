@@ -3,13 +3,15 @@
 namespace App\Models;
 
 use App\Models\Traits\Uuid;
+use App\Filters\GenreFilter;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Genre extends Model
 {
-    use HasFactory, SoftDeletes, Uuid;
+    use HasFactory, SoftDeletes, Uuid, Filterable;
 
     public $incrementing = false;
     protected $keyType = 'string';
@@ -23,5 +25,9 @@ class Genre extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class)->withTrashed();
+    }
+
+    public function modelFilter() {
+        return $this->provideFilter(GenreFilter::class);
     }
 }
