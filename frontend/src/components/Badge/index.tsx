@@ -18,16 +18,25 @@ const badgeTheme = createMuiTheme({
 });
 
 const Badge: React.FC<BadgeProps> = (props) => {
-  let [color, setColor] = useState(props.color as ChipColor);
-  let [useCustomTheme, setUseCustomTheme] = useState(false);
-  
-  useEffect(() => {
-    switch (props.color) {
-      case 'success': setColor('primary'); setUseCustomTheme(true); break;
-      case 'error':   setColor('secondary'); setUseCustomTheme(true); break;
-      default: break;
+  let useCustomTheme = false;
+  let color = mapChipColor();
+
+  function mapChipColor() {
+    let color = props.color;
+    switch (color) {
+      case 'success':
+        color = 'primary';
+        useCustomTheme = true;
+        break;
+      case 'error':
+        color = 'secondary';
+        useCustomTheme = true;
+        break;
+      default:
+        break;
     }
-  }, []);
+    return color;
+  }
 
   const renderChip = () => (
     <Chip label={ props.label } color={ color } />

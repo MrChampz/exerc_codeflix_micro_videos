@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, FormControl, FormControlLabel, FormLabel, makeStyles, Radio, RadioGroup, TextField, Theme } from '@material-ui/core';
+import { FormControl, FormControlLabel, FormHelperText, FormLabel, Radio, RadioGroup, TextField } from '@material-ui/core';
 import { Controller, useForm } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
-import CastMemberResource from '../../util/http/cast-member-resource';
 import * as yup from '../../util/vendor/yup';
-
-const useStyles = makeStyles((theme: Theme) => {
-  return {
-    submit: {
-      margin: theme.spacing(1)
-    }
-  }
-});
+import { Response, CastMember } from '../../util/models';
+import CastMemberResource from '../../util/http/cast-member-resource';
+import { DefaultForm, SubmitActions } from '../../components';
 
 const validationSchema = yup.object().shape({
   name:
@@ -29,58 +23,75 @@ const validationSchema = yup.object().shape({
 });
 
 const Form: React.FC = () => {
-  const classes = useStyles();
-  const router = useHistory();
-  const { id } = useParams<{ id?: string }>();
-  const { enqueueSnackbar } = useSnackbar();
-
-  const { getValues, setValue, handleSubmit, watch, control, reset, formState: { errors }} = useForm({
+  const { 
+    getValues, 
+    setValue, 
+    handleSubmit, 
+    watch, 
+    control, 
+    reset,
+    trigger,
+    formState: { errors }
+  } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
       name: '',
       type: 1,
     }
   });
+  
+  const router = useHistory();
+  const { id } = useParams<{ id?: string }>();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!id) return;
 
-    setLoading(true);
-    CastMemberResource
-      .get(id)
-      .then(({ data }) => {
+    (async () => {
+      setLoading(true);
+      try {
+        const { data } = await CastMemberResource.get<Response<CastMember>>(id);
         reset(data.data);
-      })
-      .finally(() => setLoading(false));
+      } catch (error) {
+        console.error(error);
+        enqueueSnackbar("Não foi possível carregar as informações", { variant: 'error' });
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
-  const onSubmit = (formData, event) => {
+  const onSubmit = async (formData, event) => {
     setLoading(true);
-    const result = !id
-      ?  CastMemberResource.create(formData)
-      :  CastMemberResource.update(id, formData);
+    try {
+      const promise = !id
+        ?  CastMemberResource.create<Response<CastMember>>(formData)
+        :  CastMemberResource.update<Response<CastMember>>(id, formData);
 
-    result
-      .then(({ data }) => {
-        enqueueSnackbar("Membro de elenco salvo com sucesso", { variant: 'success' });
-        setTimeout(() => {
-          event ? (
-            id ? router.replace(`/cast_members/${ data.data.id }/edit`)
-               : router.push(`/cast_members/${ data.data.id }/edit`)
-          ) : router.push('/cast_members');
-        });
-      })
-      .catch(error => {
-        console.log(error);
-        enqueueSnackbar("Não foi possível salvar o membro de elenco", { variant: 'error' });
-      })
-      .finally(() => setLoading(false));
+      const { data } = await promise;
+        
+      enqueueSnackbar("Membro de elenco salvo com sucesso", { variant: 'success' });
+      setTimeout(() => {
+        event ? (
+          id ? router.replace(`/cast_members/${ data.data.id }/edit`)
+             : router.push(`/cast_members/${ data.data.id }/edit`)
+        ) : router.push('/cast_members');
+      });
+    } catch(error) {
+      console.log(error);
+      enqueueSnackbar("Não foi possível salvar o membro de elenco", { variant: 'error' });
+    } finally {
+      setLoading(false);
+    }
   }
   
   return (
-    <form onSubmit={ handleSubmit(onSubmit) }>
+    <DefaultForm
+      GridItemProps={{ xs: 12, md: 6 }}
+      onSubmit={ handleSubmit(onSubmit) }
+    >
       <Controller
         name="name"
         control={ control }
@@ -100,6 +111,7 @@ const Form: React.FC = () => {
         component="fieldset"
         fullWidth
         margin="normal"
+        error={ errors.type !== undefined }
         disabled={ loading }
       >
         <FormLabel component="legend">Tipo</FormLabel>
@@ -123,28 +135,17 @@ const Form: React.FC = () => {
             control={ <Radio color="primary" /> }
           />
         </RadioGroup>
+        <FormHelperText>{ errors.type && errors.type.message }</FormHelperText>
       </FormControl>
-      <Box dir="rtl">
-        <Button
-          className={ classes.submit }
-          variant="contained"
-          color="secondary"
-          onClick={() => onSubmit(getValues(), null)}
-          disabled={ loading }
-        >
-          Salvar
-        </Button>
-        <Button
-          className={ classes.submit }
-          variant="contained"
-          color="secondary"
-          type="submit"
-          disabled={ loading }
-        >
-          Salvar e continuar editando
-        </Button>
-      </Box>
-    </form>
+      <SubmitActions
+        disabled={ loading }
+        onSave={() => {
+          trigger().then(valid => {
+            valid && onSubmit(getValues(), null);
+          });
+        }}
+      />
+    </DefaultForm>
   );
 };
 

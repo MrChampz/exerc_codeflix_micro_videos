@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Checkbox, FormControlLabel, makeStyles, TextField, Theme, Typography } from '@material-ui/core';
+import { Checkbox, FormControlLabel, TextField } from '@material-ui/core';
 import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory, useParams } from 'react-router';
-import CategoryResource from '../../util/http/category-resource';
-import * as yup from '../../util/vendor/yup';
 import { useSnackbar } from 'notistack';
-
-const useStyles = makeStyles((theme: Theme) => {
-  return {
-    submit: {
-      margin: theme.spacing(1)
-    }
-  }
-});
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from '../../util/vendor/yup';
+import CategoryResource from '../../util/http/category-resource';
+import { Response, Category } from '../../util/models';
+import { DefaultForm, SubmitActions } from '../../components';
 
 const validationSchema = yup.object().shape({
   name: yup.string()
@@ -23,12 +17,15 @@ const validationSchema = yup.object().shape({
 });
 
 const Form: React.FC = () => {
-  const classes = useStyles();
-  const router = useHistory();
-  const { id } = useParams<{ id?: string }>();
-  const { enqueueSnackbar } = useSnackbar();
-
-  const { getValues, handleSubmit, watch, control, reset, formState: { errors }} = useForm({
+  const {
+    getValues, 
+    handleSubmit, 
+    watch, 
+    control, 
+    reset,
+    trigger,
+    formState: { errors }
+  } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
       name: '',
@@ -37,45 +34,58 @@ const Form: React.FC = () => {
     }
   });
 
+  const router = useHistory();
+  const { id } = useParams<{ id?: string }>();
+  const { enqueueSnackbar } = useSnackbar();
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!id) return;
 
-    setLoading(true);
-    CategoryResource
-      .get(id)
-      .then(({ data }) => {
+    (async () => {
+      setLoading(true);
+      try {
+        const { data } = await CategoryResource.get<Response<Category>>(id);
         reset(data.data);
-      })
-      .finally(() => setLoading(false));
+      } catch(error) {
+        console.error(error);
+        enqueueSnackbar("Não foi possível carregar as informações", { variant: 'error' });
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
-  const onSubmit = (formData, event) => {
+  const onSubmit = async (formData, event) => {
     setLoading(true);
-    const result = !id
-      ?  CategoryResource.create(formData)
-      :  CategoryResource.update(id, formData);
+    try {
+      const promise = !id
+        ?  CategoryResource.create<Response<Category>>(formData)
+        :  CategoryResource.update<Response<Category>>(id, formData);
 
-    result
-      .then(({ data }) => {
-        enqueueSnackbar("Categoria salva com sucesso", { variant: 'success' });
-        setTimeout(() => {
-          event ? (
-            id ? router.replace(`/categories/${ data.data.id }/edit`)
-            : router.push(`/categories/${ data.data.id }/edit`)
-            ) : router.push('/categories');
-        });
-      })
-      .catch(error => {
-        console.log(error);
-        enqueueSnackbar("Não foi possível salvar a categoria", { variant: 'error' });
-      })
-      .finally(() => setLoading(false));
+      const { data } = await promise;
+  
+      enqueueSnackbar("Categoria salva com sucesso", { variant: 'success' });
+      setTimeout(() => {
+        event ? (
+          id ? router.replace(`/categories/${ data.data.id }/edit`)
+          : router.push(`/categories/${ data.data.id }/edit`)
+          ) : router.push('/categories');
+      });
+    } catch(error) {
+      console.log(error);
+      enqueueSnackbar("Não foi possível salvar a categoria", { variant: 'error' });
+    } finally {
+      setLoading(false);
+    }
   }
   
   return (
-    <form onSubmit={ handleSubmit(onSubmit) }>
+    <DefaultForm
+      GridItemProps={{ xs: 12, md: 6 }}
+      onSubmit={ handleSubmit(onSubmit) }
+    >
       <Controller
         name="name"
         control={ control }
@@ -125,27 +135,15 @@ const Form: React.FC = () => {
           />
         }
       />
-      <Box dir="rtl">
-        <Button
-          className={ classes.submit }
-          variant="contained"
-          color="secondary"
-          onClick={() => onSubmit(getValues(), null)}
-          disabled={ loading }
-        >
-          Salvar
-        </Button>
-        <Button
-          className={ classes.submit }
-          variant="contained"
-          color="secondary"
-          type="submit"
-          disabled={ loading }
-        >
-          Salvar e continuar editando
-        </Button>
-      </Box>
-    </form>
+      <SubmitActions
+        disabled={ loading }
+        onSave={() => {
+          trigger().then(valid => {
+            valid && onSubmit(getValues(), null);
+          });
+        }}
+      />
+    </DefaultForm>
   );
 };
 

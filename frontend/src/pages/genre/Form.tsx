@@ -1,25 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Checkbox, FormControl, FormControlLabel, FormHelperText, Grid, InputLabel, ListItemText, makeStyles, MenuItem, Select, TextField, Theme, Typography } from '@material-ui/core';
+import { Checkbox, FormControl, FormControlLabel, FormHelperText, InputLabel, ListItemText, MenuItem, Select, TextField } from '@material-ui/core';
 import { Controller, useForm } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from '../../util/vendor/yup';
 import GenreResource from '../../util/http/genre-resource';
 import CategoryResource from '../../util/http/category-resource';
-import * as yup from '../../util/vendor/yup';
-
-const useStyles = makeStyles((theme: Theme) => {
-  return {
-    submit: {
-      margin: theme.spacing(1)
-    }
-  }
-});
-
-interface Category {
-  id: string;
-  name: string;
-}
+import { ListResponse, Response, Category, Genre } from '../../util/models';
+import { DefaultForm, SubmitActions } from '../../components';
 
 const validationSchema = yup.object().shape({
   name:
@@ -29,73 +18,96 @@ const validationSchema = yup.object().shape({
        .required(),
   categories:
     yup.array()
-       .of(yup.string().uuid())
        .label("Categorias")
-       .min(1)
-       .required()
+       .min(1, "É necessário pelo menos uma categoria")
 });
 
 const Form: React.FC = () => {
-  const classes = useStyles();
-  const router = useHistory();
-  const { id } = useParams<{ id?: string }>();
-  const { enqueueSnackbar } = useSnackbar();
-
-  const { watch, getValues, setValue, handleSubmit, control, reset, formState: { errors }} = useForm({
+  const {
+    getValues,
+    setValue,
+    handleSubmit,
+    watch,
+    control,
+    reset,
+    trigger,
+    formState: { errors }
+  } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
       name: '',
       is_active: true,
-      categories: [],
+      categories: [] as string[],
     }
   });
-  const selectedCategories = watch("categories") as string[];
-
-  const [categories, setCategories] = useState<Category[]>([]);
+  
+  const router = useHistory();
+  const { id } = useParams<{ id?: string }>();
+  const { enqueueSnackbar } = useSnackbar();
+  
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const selectedCategories = watch("categories");
 
   useEffect(() => {
-    setLoading(true);
-    CategoryResource
-      .list()
-      .then(res => setCategories(res.data.data))
-      .finally(() => !id && setLoading(false));
+    let isSubscribed = true;
+    (async () => {
+      setLoading(true);
+      try {
+        const { data } = await CategoryResource.list<ListResponse<Category>>({
+          queryParams: {
+            all: ''
+          }
+        });
+        isSubscribed && setCategories(data.data);
 
-    if (id) {
-      GenreResource
-        .get(id)
-        .then(({ data }) => {
-          reset(data.data);
-        })
-        .finally(() => setLoading(false));
-    }
+        if (id) {
+          const { data } = await GenreResource.get<Response<Genre>>(id);
+          reset({
+            ...data.data,
+            categories: data.data.categories.map(category => category.id),
+          });
+        }
+      } catch (error) {
+        console.error(error);
+        enqueueSnackbar("Não foi possível carregar as informações", { variant: 'error' });
+      } finally {
+        setLoading(false);
+      }
+    })();
+
+    return () => { isSubscribed = false; }
   }, []);
 
-  const onSubmit = (formData, event) => {
+  const onSubmit = async (formData, event) => {
     setLoading(true);
-    const result = !id
-      ?  GenreResource.create(formData)
-      :  GenreResource.update(id, formData);
+    try {
+      const promise = !id
+        ?  GenreResource.create<Response<Genre>>(formData)
+        :  GenreResource.update<Response<Genre>>(id, formData);
+      
+      const { data } = await promise;
 
-    result
-      .then(({ data }) => {
-        enqueueSnackbar("Gênero salvo com sucesso", { variant: 'success' });
-        setTimeout(() => {
-          event ? (
-            id ? router.replace(`/genres/${ data.data.id }/edit`)
-               : router.push(`/genres/${ data.data.id }/edit`)
-            ) : router.push('/genres');
-        });
-      })
-      .catch(error => {
-        console.log(error);
-        enqueueSnackbar("Não foi possível salvar o gênero", { variant: 'error' });
-      })
-      .finally(() => setLoading(false));
+      enqueueSnackbar("Gênero salvo com sucesso", { variant: 'success' });
+      setTimeout(() => {
+        event ? (
+          id ? router.replace(`/genres/${ data.data.id }/edit`)
+             : router.push(`/genres/${ data.data.id }/edit`)
+        ) : router.push('/genres');
+      });
+    } catch(error) {
+      console.log(error);
+      enqueueSnackbar("Não foi possível salvar o gênero", { variant: 'error' });
+    } finally {
+      setLoading(false);
+    }
   }
   
   return (
-    <form onSubmit={ handleSubmit(onSubmit) }>
+    <DefaultForm
+      GridItemProps={{ xs: 12, md: 6 }}
+      onSubmit={ handleSubmit(onSubmit) }
+    >
       <Controller
         name="name"
         control={ control }
@@ -144,7 +156,7 @@ const Form: React.FC = () => {
             </MenuItem>
           ))}
         </Select>
-        <FormHelperText>{ errors.categories && errors.categories[0] && errors.categories[0].message }</FormHelperText>
+        <FormHelperText>{ errors.categories && (errors.categories as any).message }</FormHelperText>
       </FormControl>
       <Controller
         name="is_active"
@@ -164,27 +176,15 @@ const Form: React.FC = () => {
           />
         }
       />
-      <Box dir="rtl">
-        <Button
-          className={ classes.submit }
-          variant="contained"
-          color="secondary"
-          onClick={() => onSubmit(getValues(), null)}
-          disabled={ loading }
-        >
-          Salvar
-        </Button>
-        <Button
-          className={ classes.submit }
-          variant="contained"
-          color="secondary"
-          type="submit"
-          disabled={ loading }
-        >
-          Salvar e continuar editando
-        </Button>
-      </Box>
-    </form>
+      <SubmitActions
+        disabled={ loading }
+        onSave={() => {
+          trigger().then(valid => {
+            valid && onSubmit(getValues(), null);
+          });
+        }}
+      />
+    </DefaultForm>
   );
 };
 
