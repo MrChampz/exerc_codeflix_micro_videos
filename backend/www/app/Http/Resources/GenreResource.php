@@ -21,7 +21,10 @@ class GenreResource extends JsonResource
 
     private function categories()
     {
-        $categories = $this->categories->makeHidden('pivot');
+        $categories = $this->whenLoaded('categories');
+        if ($this->relationLoaded('categories')) {
+            $categories->makeHidden('pivot');
+        }
         return CategoryResource::collection($categories);
     }
 }

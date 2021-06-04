@@ -2,13 +2,14 @@ import { setLocale } from 'yup';
 
 const ptBR = {
   mixed: {
-    required: 'Campo necessário'
+    required: 'Campo necessário',
+    notType: 'Campo inválido'
   },
   string: {
     max: 'Deve ter no máximo ${max} caracteres'
   },
   number: {
-    min: 'Deve ter pelo menos ${min} caracteres'
+    min: 'Deve ser pelo menos ${min}'
   },
   array: {
     min: 'Deve ter pelo menos ${min} item(s)'

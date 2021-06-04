@@ -99,6 +99,9 @@ class Video extends Model
         if (isset($attributes['genres'])) {
             $video->genres()->sync($attributes['genres']);
         }
+        if (isset($attributes['cast_members'])) {
+            $video->castMembers()->sync($attributes['cast_members']);
+        }
     }
 
     public function categories()
@@ -109,6 +112,11 @@ class Video extends Model
     public function genres()
     {
         return $this->belongsToMany(Genre::class)->withTrashed();
+    }
+
+    public function castMembers()
+    {
+        return $this->belongsToMany(CastMember::class)->withTrashed();
     }
 
     public function getVideoFileUrlAttribute()

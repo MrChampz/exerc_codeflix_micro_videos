@@ -18,6 +18,7 @@ class VideoResource extends JsonResource
             'duration' => $this->duration,
             'categories' => $this->categories(),
             'genres' => $this->genres(),
+            'cast_members' => $this->castMembers(),
             'video' => $this->file($this->video_file, $this->video_file_url),
             'trailer' => $this->file($this->trailer_file, $this->trailer_file_url),
             'thumb' => $this->file($this->thumb_file, $this->thumb_file_url),
@@ -36,8 +37,14 @@ class VideoResource extends JsonResource
 
     private function genres()
     {
-        $genres = $this->genres->makeHidden('pivot');
+        $genres = $this->genres->load('categories')->makeHidden('pivot');
         return GenreResource::collection($genres);
+    }
+
+    private function castMembers()
+    {
+        $castMembers = $this->castMembers->makeHidden('pivot');
+        return CastMemberResource::collection($castMembers);
     }
 
     private function file($name, $url)

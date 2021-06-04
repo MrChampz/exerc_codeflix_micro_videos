@@ -2,11 +2,13 @@ import { RouteProps as RouterDomRouteProps } from 'react-router-dom';
 import {
   Dashboard,
   CategoryList,
-  CastMemberList,
-  GenreList, 
   CategoryForm, 
+  CastMemberList,
+  CastMemberForm,
+  GenreList, 
   GenreForm, 
-  CastMemberForm 
+  VideoList,
+  VideoForm 
 } from '../pages';
 
 export interface RouteProps extends RouterDomRouteProps {
@@ -83,6 +85,27 @@ const routes: RouteProps[] = [
     label: 'Editar gênero',
     path: '/genres/:id/edit',
     component: GenreForm,
+    exact: true
+  },
+  {
+    name: 'videos.list',
+    label: 'Listar vídeos',
+    path: '/videos',
+    component: VideoList,
+    exact: true
+  },
+  {
+    name: 'videos.create',
+    label: 'Criar vídeo',
+    path: '/videos/create',
+    component: VideoForm,
+    exact: true
+  },
+  {
+    name: 'videos.edit',
+    label: 'Editar vídeo',
+    path: '/videos/:id/edit',
+    component: VideoForm,
     exact: true
   },
 ];

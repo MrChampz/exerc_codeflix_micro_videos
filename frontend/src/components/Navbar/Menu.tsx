@@ -3,13 +3,13 @@ import { IconButton, Menu as MuiMenu, MenuItem } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import MenuIcon from '@material-ui/icons/Menu';
 import routes, { RouteProps } from '../../routes';
-import { getNameOfJSDocTypedef } from 'typescript';
 
 const listRoutes = {
   'dashboard': 'Dashboard',
   'categories.list': 'Categorias',
   'genres.list': 'Gêneros',
   'cast_members.list': 'Membros de elenco',
+  'videos.list': 'Vídeos',
 };
 const menuRoutes = routes.filter(route => Object.keys(listRoutes).includes(route.name));
 
