@@ -8,7 +8,8 @@ import {
   GenreList, 
   GenreForm, 
   VideoList,
-  VideoForm 
+  VideoForm,
+  Uploads
 } from '../pages';
 
 export interface RouteProps extends RouterDomRouteProps {
@@ -106,6 +107,13 @@ const routes: RouteProps[] = [
     label: 'Editar vídeo',
     path: '/videos/:id/edit',
     component: VideoForm,
+    exact: true
+  },
+  {
+    name: 'uploads',
+    label: 'Uploads',
+    path: '/uploads',
+    component: Uploads,
     exact: true
   },
 ];

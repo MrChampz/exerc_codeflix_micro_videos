@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Checkbox, FormControlLabel, TextField } from '@material-ui/core';
 import { Controller, useForm } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router';
@@ -8,6 +8,7 @@ import * as yup from '../../util/vendor/yup';
 import CategoryResource from '../../util/http/category-resource';
 import { Response, Category } from '../../util/models';
 import { DefaultForm, SubmitActions } from '../../components';
+import LoadingContext from '../../components/LoadingProvider/LoadingContext';
 
 const validationSchema = yup.object().shape({
   name: yup.string()
@@ -38,27 +39,23 @@ const Form: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const { enqueueSnackbar } = useSnackbar();
 
-  const [loading, setLoading] = useState(false);
+  const loading = useContext(LoadingContext);
 
   useEffect(() => {
     if (!id) return;
 
     (async () => {
-      setLoading(true);
       try {
         const { data } = await CategoryResource.get<Response<Category>>(id);
         reset(data.data);
       } catch(error) {
         console.error(error);
         enqueueSnackbar("Não foi possível carregar as informações", { variant: 'error' });
-      } finally {
-        setLoading(false);
       }
     })();
   }, []);
 
   const onSubmit = async (formData, event) => {
-    setLoading(true);
     try {
       const promise = !id
         ?  CategoryResource.create<Response<Category>>(formData)
@@ -76,8 +73,6 @@ const Form: React.FC = () => {
     } catch(error) {
       console.log(error);
       enqueueSnackbar("Não foi possível salvar a categoria", { variant: 'error' });
-    } finally {
-      setLoading(false);
     }
   }
   

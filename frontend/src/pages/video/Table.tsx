@@ -1,17 +1,19 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { MutableRefObject, useContext, useEffect, useRef, useState } from 'react';
 import { IconButton, MuiThemeProvider } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import { Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import { useSnackbar } from 'notistack';
-import { DefaultTable, TableColumn } from '../../components';
+import { DefaultTable, DeleteDialog, TableColumn } from '../../components';
 import { makeActionStyles } from '../../components/DefaultTable/styles';
+import FilterResetButton from '../../components/DefaultTable/FilterResetButton';
+import { MUIDataTableRefComponent } from '../../components/DefaultTable';
 import { ListResponse, Video } from '../../util/models';
 import CategoryResource from '../../util/http/category-resource';
 import VideoResource from '../../util/http/video-resource';
-import FilterResetButton from '../../components/DefaultTable/FilterResetButton';
 import useFilter from '../../hooks/useFilter';
-import { MUIDataTableRefComponent } from '../../components/DefaultTable';
+import useDeleteCollection from '../../hooks/useDeleteCollection';
+import LoadingContext from '../../components/LoadingProvider/LoadingContext';
 
 const columns: TableColumn[] = [
   {
@@ -35,10 +37,7 @@ const columns: TableColumn[] = [
     name: "genres",
     label: "Gêneros",
     options: {
-      filterType: 'multiselect',
-      filterOptions: {
-        names: []
-      },
+      filter: false,
       customBodyRender: (value, tableMeta, updateValue) => {
         return value.map(genre => genre.name).join(', ');
       }
@@ -49,10 +48,7 @@ const columns: TableColumn[] = [
     name: "categories",
     label: "Categorias",
     options: {
-      filterType: 'multiselect',
-      filterOptions: {
-        names: []
-      },
+      filter: false,
       customBodyRender: (value, tableMeta, updateValue) => {
         return value.map(category => category.name).join(', ');
       }
@@ -103,7 +99,7 @@ const Table = () => {
   const subscribed = useRef(true);
   const tableRef = useRef() as MutableRefObject<MUIDataTableRefComponent>;
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const loading = useContext(LoadingContext);
   const [data, setData] = useState<Video[]>([]);
 
   const {
@@ -117,8 +113,15 @@ const Table = () => {
     debounceTime,
     rowsPerPage,
     rowsPerPageOptions,
-    tableRef
+    tableRef,
   });
+
+  const {
+    openDeleteDialog,
+    setOpenDeleteDialog,
+    rowsToDelete,
+    setRowsToDelete
+  } = useDeleteCollection();
 
   useEffect(() => {
     subscribed.current = true;
@@ -132,7 +135,6 @@ const Table = () => {
   ]);
 
   const getData = async () => {
-    setLoading(true);
     try {
       const { data } = await VideoResource.list<ListResponse<Video>>({
         queryParams: {
@@ -151,13 +153,41 @@ const Table = () => {
       console.error(error);
       if (CategoryResource.isCancelledRequest(error)) return;
       enqueueSnackbar("Não foi possível carregar as informações", { variant: 'error' });
-    } finally {
-      setLoading(false);
     }
+  }
+
+  const deleteRows = (confirmed: boolean) => {
+    if (!confirmed) {
+      setOpenDeleteDialog(false);
+      return;
+    }
+    
+    const ids = rowsToDelete.data.map(row => data[row.index].id).join(',');
+
+    VideoResource.deleteCollection({ ids })
+      .then(res => {
+        enqueueSnackbar("Registros excluídos com sucesso", { variant: 'success' });
+        if (rowsToDelete.data.length === filterState.pagination.perPage &&
+            filterState.pagination.page > 1) {
+          const page = filterState.pagination.page - 2;
+          filterManager.changePage(page);
+        } else {
+          getData();
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        enqueueSnackbar("Não foi possível excluir os registros", { variant: 'error' });
+      })
+      .finally(() => setOpenDeleteDialog(false));
   }
 
   return (
     <MuiThemeProvider theme={ makeActionStyles(columns.length - 1) }>
+      <DeleteDialog
+        open={ openDeleteDialog }
+        onClose={ deleteRows }
+      />
       <DefaultTable
         title=""
         ref={ tableRef }
@@ -184,7 +214,11 @@ const Table = () => {
           onChangeRowsPerPage: perPage => filterManager.changeRowsPerPage(perPage),
           onColumnSortChange: (changedColumn, dir) => {
             filterManager.changeColumnSort(changedColumn, dir);
-          }
+          },
+          onRowsDelete: (rowsDeleted) => {
+            setRowsToDelete(rowsDeleted);
+            return false;
+          },
         }}
       />
     </MuiThemeProvider>

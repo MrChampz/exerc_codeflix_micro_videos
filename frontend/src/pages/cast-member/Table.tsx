@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
+import React, { MutableRefObject, useContext, useEffect, useRef, useState } from 'react';
 import { IconButton, MuiThemeProvider } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import { Link } from 'react-router-dom';
@@ -13,6 +13,7 @@ import CastMemberResource from '../../util/http/cast-member-resource';
 import { MUIDataTableRefComponent } from '../../components/DefaultTable';
 import useFilter from '../../hooks/useFilter';
 import FilterResetButton from '../../components/DefaultTable/FilterResetButton';
+import LoadingContext from '../../components/LoadingProvider/LoadingContext';
 
 const castMemberTypeNames = Object.values(CastMemberTypeMap);
 
@@ -91,7 +92,7 @@ const Table: React.FC = () => {
   const subscribed = useRef(true);
   const tableRef = useRef() as MutableRefObject<MUIDataTableRefComponent>;
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const loading = useContext(LoadingContext);
   const [data, setData] = useState<CastMember[]>([]);
 
   const {
@@ -147,7 +148,6 @@ const Table: React.FC = () => {
   ]);
 
   const getData = async () => {
-    setLoading(true);
     try {
       const { data } = await CastMemberResource.list<ListResponse<CastMember>>({
         queryParams: {
@@ -169,8 +169,6 @@ const Table: React.FC = () => {
       console.error(error);
       if (CastMemberResource.isCancelledRequest(error)) return;
       enqueueSnackbar("Não foi possível carregar as informações", { variant: 'error' });
-    } finally {
-      setLoading(false);
     }
   }
 

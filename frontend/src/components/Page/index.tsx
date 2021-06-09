@@ -10,12 +10,12 @@ const Page: React.FC<PageProps> = (props) => {
   const classes = useStyles();
   return (
     <Container>
-      <Typography component="h1" variant="h5" className={ classes.title }>
-        { props.title }
-      </Typography>
-      <Box paddingTop={1}>
-        { props.children }
+      <Box marginTop={2}>
+        <Typography component="h1" variant="h5" className={ classes.title }>
+          { props.title }
+        </Typography>
       </Box>
+      { props.children }
     </Container>
   );
 }

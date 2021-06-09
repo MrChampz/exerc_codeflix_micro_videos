@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { forwardRef, MutableRefObject, RefAttributes, useImperativeHandle, useRef } from 'react';
 import { Box, FormControl, FormControlProps, FormHelperText, Typography } from '@material-ui/core';
 import { AsyncAutocomplete, GridSelected, GridSelectedItem } from '../../../components';
+import { AsyncAutocompleteComponent } from '../../../components/AsyncAutocomplete';
 import { CastMember } from '../../../util/models';
 import useCollectionManager from '../../../hooks/useCollectionManager';
 import useHttpHandled from '../../../hooks/useHttpHandled';
 import CastMemberResource from '../../../util/http/cast-member-resource';
 
-interface CastMemberFieldProps {
+interface CastMemberFieldProps extends RefAttributes<CastMemberFieldComponent> {
   castMembers: CastMember[];
   setCastMembers: (castMembers: CastMember[]) => void;
   error?: any;
@@ -14,11 +15,22 @@ interface CastMemberFieldProps {
   FormControlProps?: FormControlProps;
 }
 
-const CastMemberField: React.FC<CastMemberFieldProps> = (props) => {
+export interface CastMemberFieldComponent {
+  clear: () => void;
+}
+
+const CastMemberField =
+  forwardRef<CastMemberFieldComponent, CastMemberFieldProps>((props, ref) => {
+    
   const { castMembers, setCastMembers, error, disabled } = props;
 
   const autocompleteHttp = useHttpHandled();
+  const autocompleteRef = useRef() as MutableRefObject<AsyncAutocompleteComponent>;
   const { addItem, removeItem } = useCollectionManager(castMembers, setCastMembers);
+
+  useImperativeHandle(ref, () => ({
+    clear: () => autocompleteRef.current.clear()
+  }));
 
   const fetchCastMembers = (searchText: string) => autocompleteHttp(
     CastMemberResource.list({
@@ -33,6 +45,7 @@ const CastMemberField: React.FC<CastMemberFieldProps> = (props) => {
   return (
     <>
       <AsyncAutocomplete
+        ref={ autocompleteRef }
         fetchOptions={ fetchCastMembers }
         TextFieldProps={{
           label: "Elenco",
@@ -73,6 +86,6 @@ const CastMemberField: React.FC<CastMemberFieldProps> = (props) => {
       </FormControl>
     </>
   );
-};
+});
 
 export default CastMemberField;

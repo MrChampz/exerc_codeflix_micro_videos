@@ -8,7 +8,7 @@ const PageForm: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   return (
     <Page title={ !id ? "Criar gênero" : "Editar gênero" }>
-      <Box>
+      <Box marginTop={2}>
         <Form />
       </Box>
     </Page>

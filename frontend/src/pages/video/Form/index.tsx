@@ -1,18 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { createRef, MutableRefObject, useContext, useEffect, useMemo, useRef } from 'react';
 import { Card, CardContent, Checkbox, FormControlLabel, FormHelperText, Grid, TextField, Typography, useMediaQuery, useTheme } from '@material-ui/core';
 import { Controller, useForm } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router';
+import { useDispatch } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { omit, zipObject } from 'lodash';
 import * as yup from '../../../util/vendor/yup';
-import {  Category, Response, Video, VideoFileFieldsMap } from '../../../util/models';
+import {  Response, Video, VideoFileFieldsMap } from '../../../util/models';
 import { DefaultForm, SubmitActions } from '../../../components';
 import VideoResource from '../../../util/http/video-resource';
 import RatingField from './RatingField';
 import UploadField from './UploadField';
-import GenreField from './GenreField';
-import CategoryField from './CategoryField';
-import CastMemberField from './CastMemberField';
+import GenreField, { GenreFieldComponent } from './GenreField';
+import CategoryField, { CategoryFieldComponent } from './CategoryField';
+import CastMemberField, { CastMemberFieldComponent } from './CastMemberField';
+import { InputFileComponent } from './InputFile';
+import useSnackbarFormError from '../../../hooks/useSnackbarFormError';
+import LoadingContext from '../../../components/LoadingProvider/LoadingContext';
+import SnackbarUpload from '../../../components/SnackbarUpload';
+import { Creators } from '../../../store/uploads';
+import { FileInfo } from '../../../store/uploads/types';
 import { useStyles } from './styles';
 
 const validationSchema = yup.object().shape({
@@ -45,18 +53,7 @@ const validationSchema = yup.object().shape({
     .label("Gêneros")
     .min(1)
     .required()
-    .test({
-      message: "Um ou mais gêneros não tem categoria atrelada",
-      test: (genres, context) => {
-        const categoriesIds = context.parent.categories.map(({ id }) => id);
-        const hasUnpairedGenres = genres?.every(genre =>
-          genre.categories
-               .filter(category => categoriesIds.includes(category.id))
-               .length !== 0
-        );
-        return Boolean(hasUnpairedGenres);
-      }
-    }),
+    .genreHasCategories(),
   categories: yup
     .array()
     .label("Categorias")
@@ -80,19 +77,27 @@ const Form: React.FC = () => {
     control, 
     reset,
     trigger,
-    formState: { errors }
+    formState: { submitCount, errors }
   } = useForm({
     resolver: yupResolver(validationSchema),
   });
+  useSnackbarFormError(submitCount, errors);
 
   const classes = useStyles();
   const router = useHistory();
+  const dispatch = useDispatch();
   const { id } = useParams<{ id?: string }>();
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const isGreaterThanMd = useMediaQuery(theme.breakpoints.up('md'));
+  const castMemberFieldRef = useRef() as MutableRefObject<CastMemberFieldComponent>;
+  const genreFieldRef = useRef() as MutableRefObject<GenreFieldComponent>;
+  const categoryFieldRef = useRef() as MutableRefObject<CategoryFieldComponent>;
+  const uploadFieldsRef = useRef(
+    zipObject(uploadFields, uploadFields.map(() => createRef()))
+  ) as MutableRefObject<{ [key: string]: MutableRefObject<InputFileComponent> }>;
 
-  const [loading, setLoading] = useState(false);
+  const loading = useContext(LoadingContext);
 
   useEffect(() => {
     uploadFields.forEach(field => {
@@ -104,46 +109,22 @@ const Form: React.FC = () => {
     if (!id) return;
 
     (async () => {
-      setLoading(true);
       try {
         const { data } = await VideoResource.get<Response<Video>>(id);
         reset(data.data);
       } catch(error) {
         console.error(error);
         enqueueSnackbar("Não foi possível carregar as informações", { variant: 'error' });
-      } finally {
-        setLoading(false);
       }
     })();
   }, []);
 
   const onSubmit = async (formData, event) => {
-    formData.cast_members = formData.cast_members.map(castMember => castMember.id);
-    formData.genres = formData.genres.map(genre => genre.id);
-    formData.categories = formData.categories.map(category => category.id);
+    const sendData = omit(formData, [...uploadFields]);
+    sendData['cast_members'] = formData.cast_members.map(castMember => castMember.id);
+    sendData['genres'] = formData.genres.map(genre => genre.id);
+    sendData['categories'] = formData.categories.map(category => category.id);
 
-    const sendData = new FormData();
-    Object.keys(formData).forEach(key => {
-      let value = formData[key];
-
-      if (typeof value === "undefined") {
-        return;
-      }
-      if (typeof value === "boolean") {
-        value = value ? 1 : 0;
-      }
-      if (value instanceof Array) {
-        value.forEach(item => sendData.append(`${key}[]`, item));
-        return;
-      }
-      sendData.append(key, value);
-    });
-
-    if (id) {
-      sendData.append('_method','PUT');
-    }
-
-    setLoading(true);
     try {
       const promise = !id
         ?  VideoResource.create<Response<Video>>(sendData)
@@ -152,6 +133,9 @@ const Form: React.FC = () => {
       const { data } = await promise;
   
       enqueueSnackbar("Vídeo salvo com sucesso", { variant: 'success' });
+      uploadFiles(data.data);
+      id && resetForm(data);
+
       setTimeout(() => {
         event ? (
           id ? router.replace(`/videos/${ data.data.id }/edit`)
@@ -161,9 +145,38 @@ const Form: React.FC = () => {
     } catch(error) {
       console.log(error);
       enqueueSnackbar("Não foi possível salvar o vídeo", { variant: 'error' });
-    } finally {
-      setLoading(false);
     }
+  }
+
+  const uploadFiles = (video: Video) => {
+    const files: FileInfo[] = uploadFields
+      .filter(fileField => getValues()[fileField])
+      .map(fileField => ({ fileField, file: getValues()[fileField]}));
+
+    if (!files.length) return;
+
+    dispatch(Creators.addUpload({ video, files }));
+
+    enqueueSnackbar('', {
+      key: 'snackbar-upload',
+      persist: true,
+      anchorOrigin: {
+        vertical: 'bottom',
+        horizontal: 'right'
+      },
+      content: (key) => (
+        <SnackbarUpload id={ key } />
+      )
+    });
+  }
+
+  const resetForm = (data: any) => {
+    Object.keys(uploadFieldsRef.current)
+          .forEach(field => uploadFieldsRef.current[field].current.clear());
+    castMemberFieldRef.current.clear();
+    genreFieldRef.current.clear();
+    categoryFieldRef.current.clear();
+    reset(data);
   }
 
   return (
@@ -185,7 +198,7 @@ const Form: React.FC = () => {
                 helperText={ errors.title && errors.title.message }
                 disabled={ loading }
                 InputLabelProps={{
-                  shrink: Boolean(id)
+                  shrink: id ? true : undefined
                 }}
                 { ...field } 
               />
@@ -205,7 +218,7 @@ const Form: React.FC = () => {
                 helperText={ errors.description && errors.description.message }
                 disabled={ loading }
                 InputLabelProps={{
-                  shrink: Boolean(id)
+                  shrink: id ? true : undefined
                 }}
                 margin="normal"
                 { ...field } 
@@ -227,7 +240,7 @@ const Form: React.FC = () => {
                     helperText={ errors.year_launched && errors.year_launched.message }
                     disabled={ loading }
                     InputLabelProps={{
-                      shrink: Boolean(id)
+                      shrink: id ? true : undefined
                     }}
                     margin="normal"
                     { ...field } 
@@ -249,7 +262,7 @@ const Form: React.FC = () => {
                     helperText={ errors.duration && errors.duration.message }
                     disabled={ loading }
                     InputLabelProps={{
-                      shrink: Boolean(id)
+                      shrink: id ? true : undefined
                     }}
                     margin="normal"
                     { ...field } 
@@ -313,14 +326,6 @@ const Form: React.FC = () => {
                     }
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <FormHelperText>
-                    Escolha os gêneros do vídeo
-                  </FormHelperText>
-                  <FormHelperText>
-                    Escolha pelo menos uma categoria de cada gênero
-                  </FormHelperText>
-                </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -349,11 +354,13 @@ const Form: React.FC = () => {
                 Imagens
               </Typography>
               <UploadField
+                ref={ uploadFieldsRef.current['thumb_file'] }
                 label="Thumb"
                 accept="image/*"
                 setValue={ value => setValue('thumb_file', value) }
               />
               <UploadField
+                ref={ uploadFieldsRef.current['banner_file'] }
                 label="Banner"
                 accept="image/*"
                 setValue={ value => setValue('banner_file', value) }
@@ -366,11 +373,13 @@ const Form: React.FC = () => {
                 Vídeos
               </Typography>
               <UploadField
+                ref={ uploadFieldsRef.current['trailer_file'] }
                 label="Trailer"
                 accept="video/mp4"
                 setValue={ value => setValue('trailer_file', value) }
               />
               <UploadField
+                ref={ uploadFieldsRef.current['video_file'] }
                 label="Principal"
                 accept="video/mp4"
                 setValue={ value => setValue('video_file', value) }

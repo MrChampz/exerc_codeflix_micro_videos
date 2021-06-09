@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, FormControl, FormControlProps, FormHelperText, Typography } from '@material-ui/core';
+import { forwardRef, MutableRefObject, RefAttributes, useImperativeHandle, useRef } from 'react';
+import { Box, FormControl, FormControlProps, FormHelperText, Typography, useTheme } from '@material-ui/core';
 import { AsyncAutocomplete, GridSelected, GridSelectedItem } from '../../../components';
 import { Category, Genre } from '../../../util/models';
 import useCollectionManager from '../../../hooks/useCollectionManager';
@@ -7,8 +7,9 @@ import useHttpHandled from '../../../hooks/useHttpHandled';
 import CategoryResource from '../../../util/http/category-resource';
 import { getGenresFromCategory } from '../../../util/model-filters';
 import { useCategoryFieldStyles } from './styles';
+import { AsyncAutocompleteComponent } from '../../../components/AsyncAutocomplete';
 
-interface CategoryFieldProps {
+interface CategoryFieldProps extends RefAttributes<CategoryFieldComponent> {
   categories: Category[];
   setCategories: (categories: Category[]) => void;
   genres: Genre[];
@@ -17,12 +18,24 @@ interface CategoryFieldProps {
   FormControlProps?: FormControlProps;
 }
 
-const CategoryField: React.FC<CategoryFieldProps> = (props) => {
+export interface CategoryFieldComponent {
+  clear: () => void;
+}
+
+const CategoryField =
+  forwardRef<CategoryFieldComponent, CategoryFieldProps>((props, ref) => {
+
   const{ categories, setCategories, genres, error, disabled } = props;
   
   const classes = useCategoryFieldStyles();
+  const theme = useTheme();
   const autocompleteHttp = useHttpHandled();
+  const autocompleteRef = useRef() as MutableRefObject<AsyncAutocompleteComponent>;
   const { addItem, removeItem } = useCollectionManager(categories, setCategories);
+
+  useImperativeHandle(ref, () => ({
+    clear: () => autocompleteRef.current.clear()
+  }));
 
   const fetchCategories = () => autocompleteHttp(
     CategoryResource.list({
@@ -37,6 +50,7 @@ const CategoryField: React.FC<CategoryFieldProps> = (props) => {
   return (
     <>
       <AsyncAutocomplete
+        ref={ autocompleteRef }
         fetchOptions={ fetchCategories }
         TextFieldProps={{
           label: "Categorias",
@@ -50,6 +64,9 @@ const CategoryField: React.FC<CategoryFieldProps> = (props) => {
           onChange: (event, value) => addItem(value),
         }}
       />
+      <FormHelperText style={{ height: theme.spacing(3) }}>
+        Escolha pelo menos uma categoria de cada gênero
+      </FormHelperText>
       <FormControl
         error={ error }
         disabled={ disabled }
@@ -57,7 +74,7 @@ const CategoryField: React.FC<CategoryFieldProps> = (props) => {
         { ...props.FormControlProps }
       >
         { categories && categories.length > 0 && (
-          <Box paddingTop="10px">
+          <Box paddingTop="25px" paddingBottom="10px">
             <GridSelected>
               { categories.map((category, key) => {
                 const categoryGenres = getGenresFromCategory(genres, category)
@@ -83,6 +100,6 @@ const CategoryField: React.FC<CategoryFieldProps> = (props) => {
       </FormControl>
     </>
   );
-};
+});
 
 export default CategoryField;

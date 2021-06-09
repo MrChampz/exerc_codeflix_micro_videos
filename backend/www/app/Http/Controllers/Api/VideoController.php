@@ -45,7 +45,10 @@ class VideoController extends BasicCrudController
     {
         $video = $this->findOrFail($id);
         $this->addGenreHasCategoriesRule($request);
-        $params = $this->validate($request, $this->rulesUpdate());
+        $params = $this->validate(
+            $request,
+            $request->isMethod('PUT') ? $this->rulesUpdate() : $this->rulesPatch()
+        );
         $video->update($params);
         $resource = $this->resource();
         return new $resource($video);
@@ -87,6 +90,7 @@ class VideoController extends BasicCrudController
     {
         return parent::queryBuilder()
             ->with('categories')
-            ->with('genres');
+            ->with('genres')
+            ->with('castMembers');
     }
 }

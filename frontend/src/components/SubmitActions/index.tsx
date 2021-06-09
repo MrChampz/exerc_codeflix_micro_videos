@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Button } from '@material-ui/core';
+import classnames from 'classnames';
 
 import { useStyles } from './styles';
 
@@ -12,9 +13,9 @@ const SubmitActions: React.FC<SubmitActionsProps> = (props) => {
   const classes = useStyles();
 
   return (
-    <Box dir="rtl">
+    <Box dir="ltf">
       <Button
-        className={ classes.submit }
+        className={ classnames(classes.submit, classes.save) }
         variant="contained"
         color="secondary"
         onClick={ props.onSave }

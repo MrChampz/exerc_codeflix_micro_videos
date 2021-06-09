@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Checkbox, FormControl, FormControlLabel, FormHelperText, InputLabel, ListItemText, MenuItem, Select, TextField } from '@material-ui/core';
 import { Controller, useForm } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
@@ -9,6 +9,7 @@ import GenreResource from '../../util/http/genre-resource';
 import CategoryResource from '../../util/http/category-resource';
 import { ListResponse, Response, Category, Genre } from '../../util/models';
 import { DefaultForm, SubmitActions } from '../../components';
+import LoadingContext from '../../components/LoadingProvider/LoadingContext';
 
 const validationSchema = yup.object().shape({
   name:
@@ -45,14 +46,13 @@ const Form: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const { enqueueSnackbar } = useSnackbar();
   
-  const [loading, setLoading] = useState(false);
+  const loading = useContext(LoadingContext);
   const [categories, setCategories] = useState<Category[]>([]);
   const selectedCategories = watch("categories");
 
   useEffect(() => {
     let isSubscribed = true;
     (async () => {
-      setLoading(true);
       try {
         const { data } = await CategoryResource.list<ListResponse<Category>>({
           queryParams: {
@@ -71,8 +71,6 @@ const Form: React.FC = () => {
       } catch (error) {
         console.error(error);
         enqueueSnackbar("Não foi possível carregar as informações", { variant: 'error' });
-      } finally {
-        setLoading(false);
       }
     })();
 
@@ -80,7 +78,6 @@ const Form: React.FC = () => {
   }, []);
 
   const onSubmit = async (formData, event) => {
-    setLoading(true);
     try {
       const promise = !id
         ?  GenreResource.create<Response<Genre>>(formData)
@@ -98,8 +95,6 @@ const Form: React.FC = () => {
     } catch(error) {
       console.log(error);
       enqueueSnackbar("Não foi possível salvar o gênero", { variant: 'error' });
-    } finally {
-      setLoading(false);
     }
   }
   

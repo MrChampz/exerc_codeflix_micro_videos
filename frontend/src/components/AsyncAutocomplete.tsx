@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, RefAttributes, useEffect, useImperativeHandle, useState } from 'react';
 import { CircularProgress, TextField, TextFieldProps } from '@material-ui/core';
 import { Autocomplete, AutocompleteProps } from '@material-ui/lab';
 import { useDebounce } from 'use-debounce/lib';
@@ -6,14 +6,20 @@ import { useDebounce } from 'use-debounce/lib';
 type PartialAutocompleteProps =
   Omit<AutocompleteProps<any, any, any, any>, "options" | "renderInput">;
 
-interface AsyncAutocompleteProps {
+interface AsyncAutocompleteProps extends RefAttributes<AsyncAutocompleteComponent> {
   fetchOptions: (searchText: string) => Promise<any>;
   debounceTime?: number;
   TextFieldProps?: TextFieldProps;
   AutocompleteProps?: PartialAutocompleteProps;
 }
 
-const AsyncAutocomplete: React.FC<AsyncAutocompleteProps> = (props) => {
+export interface AsyncAutocompleteComponent {
+  clear: () => void;
+}
+
+const AsyncAutocomplete =
+  forwardRef<AsyncAutocompleteComponent, AsyncAutocompleteProps>((props, ref) => {
+
   const { debounceTime = 300 } = props;
   const { freeSolo, onOpen, onClose, onInputChange } = props.AutocompleteProps!;
 
@@ -38,6 +44,7 @@ const AsyncAutocomplete: React.FC<AsyncAutocompleteProps> = (props) => {
     open,
     loading,
     options,
+    inputValue: searchText,
     onOpen: (event) => {
       setOpen(true);
       onOpen && onOpen(event);
@@ -89,9 +96,16 @@ const AsyncAutocomplete: React.FC<AsyncAutocompleteProps> = (props) => {
     return () => { subscribed = false; }
   }, [freeSolo ? debouncedSearchText : open]);
 
+  useImperativeHandle(ref, () => ({
+    clear: () => {
+      setSearchText('');
+      setOptions([]);
+    }
+  }));
+
   return (
     <Autocomplete { ...autocompleteProps } />
   );
-};
+});
 
 export default AsyncAutocomplete;

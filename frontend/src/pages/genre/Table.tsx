@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
+import React, { MutableRefObject, useContext, useEffect, useRef, useState } from 'react';
 import { IconButton, MuiThemeProvider } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import { Link } from 'react-router-dom';
@@ -14,6 +14,7 @@ import { MUIDataTableRefComponent } from '../../components/DefaultTable';
 import useFilter from '../../hooks/useFilter';
 import FilterResetButton from '../../components/DefaultTable/FilterResetButton';
 import CategoryResource from '../../util/http/category-resource';
+import LoadingContext from '../../components/LoadingProvider/LoadingContext';
 
 const columns: TableColumn[] = [
   {
@@ -112,7 +113,7 @@ const Table: React.FC = () => {
   const subscribed = useRef(true);
   const tableRef = useRef() as MutableRefObject<MUIDataTableRefComponent>;
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const loading = useContext(LoadingContext);
   const [data, setData] = useState<Genre[]>([]);
 
   const {
@@ -194,7 +195,6 @@ const Table: React.FC = () => {
   ]);
 
   const getData = async () => {
-    setLoading(true);
     try {
       const { data } = await GenreResource.list<ListResponse<Genre>>({
         queryParams: {
@@ -217,8 +217,6 @@ const Table: React.FC = () => {
       console.error(error);
       if (GenreResource.isCancelledRequest(error)) return;
       enqueueSnackbar("Não foi possível carregar as informações", { variant: 'error' });
-    } finally {
-      setLoading(false);
     }
   }
 
